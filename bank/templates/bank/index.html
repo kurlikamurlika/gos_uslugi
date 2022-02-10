@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+{% extends 'bank/base.html' %}
+{% block page_title %}Главная{% endblock %}
+{% block body_content %}
+    {% if user.is_authenticated %}
+        <h1>{{ user.first_name }}, добро пожаловать на Гос Услуги!</h1>
+    {% else %}
+        <h1>Здравствуйте, войдите в свой аккаунт для дальнейшего использования</h1>
+    {% endif %}
+{% endblock %}

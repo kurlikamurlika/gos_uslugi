@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+{% extends 'bank/base.html' %}
+{% block page_title %}ЦБ{% endblock %}
+
+{% block body_content %}
+    {% if user.is_authenticated %}
+        <h1>Добро пожаловать в Центральный Банк</h1>
+        <h2 class="text-secondary">Тут вы можете перевести свои деньги другому человеку.</h2>
+        {% if has_bank %}
+            <h3>Ваш баланс: {{ bank_account.balance }} рублей.</h3>
+            <div class="jumbotron m-5" id="send_money_code">
+                <h4>Окно перевода на другой счёт по коду ЦБ</h4>
+                <form method="post" action="">
+                    {% csrf_token %}
+                    <h4>{{ form.receiver.label_tag }} {{ form.receiver }}</h4>
+                    <h4>{{ form.amount.label_tag }} {{ form.amount }} рублей</h4>
+                    <button class="btn btn-success btn-large mt-3" type="submit">Перевести</button>
+                </form>
+                {% if not_enough_money %}
+                    <h4 class="text-danger">У вас недостаточно денег на балансе для операции</h4>
+                {% endif %}
+                {% if works %}
+                {% else %}
+                    <h4 class="text-danger">Указан неправильный код ЦБ получателя</h4>
+                {% endif %}
+            </div>
+        {% else %}
+            <h1 class="text-warning">Сначала создайте себе банковский счёт <a class="" href="{% url 'bank:profile' user.id %}">здесь</a>.</h1>
+        {% endif %}
+    {% else %}
+        <h1>Сначала войдите в аккаунт</h1>
+    {% endif %}
+{% endblock %}
+
+</body>
+</html>

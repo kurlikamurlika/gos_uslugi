@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+{% extends 'bank/base.html' %}
+{% block page_title %}Портал Гражданина{% endblock %}
+{% block body_content %}
+    {% if user.is_authenticated %}
+        <h1>Портал Гражданина</h1>
+        {% if has_citizenship%}
+            <h2 class="text-secondary">Тут вы можете зарегестрировать свое имущество и поучаствовать в общественной жизни страны.</h2>
+        {% else %}
+            {% if has_bank %}
+                <h2>Здесь вы можете подать документы на получение гражданства Черноруси.</h2>
+                <div class="jumbotron">
+                <form method="post">
+                    {% csrf_token %}
+                    <h4>{{ form.as_p }}</h4>
+                    <button class="btn btn-success btn-lg" type="submit">Подать заявку</button>
+                </form>
+                </div>
+            {% else %}
+                <h2 class="text-danger">Сначала откройте банковский счёт</h2>
+            {% endif %}
+        {% endif %}
+    {% else %}
+        <h1>Войдите в свой аккаунт, чтобы продолжить работу с Порталом Гражданина</h1>
+    {% endif %}
+{% endblock %}

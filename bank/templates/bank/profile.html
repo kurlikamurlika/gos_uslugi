@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+{% extends 'bank/base.html' %}
+{% block page_title %}Профиль{% endblock %}
+{% block body_content %}
+    {% if user.is_authenticated %}
+        {% if user_profile.id == user.id %}
+            <h1>Привет, {{ user.first_name }}!</h1>
+            {% if no_account %}
+                <h3>Тут ты можешь создать свой банковский счет, с помощью которого сможешь воспользоваться ГосБанком!</h3>
+                <a class="btn btn-lg btn-success" href="{% url 'bank:bank_result' %}">Создать счёт</a>
+            {% else %}
+                <h3>Ваш банковский счёт:</h3>
+                <div class="jumbotron">
+                    <h4>Код ЦБ: {{ bank_acc.name }}</h4>
+                    <h4>Баланс: {{ bank_acc.balance }} рублей.</h4>
+                </div>
+                <div class="jumbotron">
+                <h3>Входящие платежи</h3>
+                    <table class="table">
+                        <thead>
+                        <th>
+                            <tr>
+                                <th>Отправитель</th>
+                                <th>Сумма</th>
+                                <th>Дата и время по Киеву</th>
+                            </tr>
+                        </th>
+                        </thead>
+                    <tbody>
+                        {% for trans in trans_get %}
+                            <tr class="bg-success">
+                            <td><h4>{{ trans.sender.user.username }}</h4></td>
+                            <td><h4>₽{{ trans.amount }}</h4></td>
+                            <td><h4>{{ trans.pub_time }}</h4></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                    </table>
+                    <h3>Исходящие платежи:</h3>
+                    <table class="table">
+                        <thead>
+                        <th>
+                            <tr>
+                                <th>Получатель</th>
+                                <th>Сумма</th>
+                                <th>Дата и время по Киеву</th>
+                            </tr>
+                        </th>
+                        </thead>
+                    <tbody>
+                        {% for trans in trans_send %}
+                            <tr class="bg-danger">
+                            <td><h4>{{ trans.receiver.user.username }}</h4></td>
+                            <td><h4>₽{{ trans.amount }}</h4></td>
+                            <td><h4>{{ trans.pub_time }}</h4></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                    </table>
+                </div>
+            {% endif %}
+        {% else %}
+            <h1>Это не ваш аккаунт!</h1>
+        {% endif %}
+    {% else %}
+        <h1>Войдите в аккаунт!</h1>
+    {% endif %}
+{% endblock %}
