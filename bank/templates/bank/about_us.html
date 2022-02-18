@@ -2,5 +2,8 @@
 {% extends 'bank/base.html' %}
 {% block page_title %}О нас{% endblock %}
 {% block body_content %}
+    {% load static %}
     <h1>О нас</h1>
+    <h2>Мы альянс Чернорусь, наследники СССР, наша цель это вернуть былое величие нашим странам и догнать и перегнать НАТО!</h2>
+    <img src="{% static 'bank/img/chernorus_flag.jpeg' %}" width="100%" alt="">
 {% endblock %}
