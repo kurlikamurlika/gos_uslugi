@@ -1,4 +1,5 @@
 from django.db import models
+from django_countries.fields import CountryField
 from django.contrib.auth.models import User
 from django.utils import timezone
 
@@ -38,6 +39,7 @@ class Citizen(models.Model):
     role = models.ManyToManyField(Role)
     discord_name = models.CharField(max_length=50, default='no')
     minecraft_name = models.CharField(max_length=16, default='no')
+    country = CountryField(default="no")
 
     def __str__(self):
         return self.user.username
@@ -47,6 +49,8 @@ class AskCitizenship(models.Model):
     bank_account = models.ForeignKey(BankAccount, on_delete=models.SET_NULL, blank=True, null=True)
     discord_name = models.CharField(max_length=50)
     minecraft_name = models.CharField(max_length=16)
+    country = CountryField(default="no")
+
     def __str__(self):
         return self.user.username
 
