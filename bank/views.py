@@ -1,4 +1,4 @@
-from .forms import SignUpForm, SendMoney, getCitizenShip
+from .forms import *
 from django.contrib.auth import login, authenticate
 from django.utils import timezone
 from django.contrib.auth.models import User
@@ -111,19 +111,22 @@ def citizen(request):
     except:
         has_citizenship = False
     form = getCitizenShip(request.POST or None)
+    form_property = RegisterProperty()
     citizen_dict = {
         'has_citizenship': has_citizenship,
         'citizenship': citizenship,
         'form': form,
         'has_bank': has_bank,
+        'form_property': form_property,
     }
 
     if form.is_valid():
         print("Works")
         minecraft_username = form.cleaned_data.get("minecraft_username")
         discord_username = form.cleaned_data.get("discord_username")
-
-        askCitizenship = AskCitizenship(user_id=request.user.id, bank_account=bank_account, discord_name=discord_username, minecraft_name=minecraft_username)
+        country = form.cleaned_data.get('country')
+        print(country)
+        askCitizenship = AskCitizenship(user_id=request.user.id, bank_account=bank_account, discord_name=discord_username, minecraft_name=minecraft_username, country=country)
         askCitizenship.save()
         return HttpResponseRedirect(reverse('bank:get_citizenship'))
     return render(request, 'bank/citizen.html', context=citizen_dict)
