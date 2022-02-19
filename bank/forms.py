@@ -25,9 +25,9 @@ class getCitizenShip(forms.Form):
     country = CountryField().formfield()
 
 class RegisterProperty(forms.ModelForm):
-    property_type = forms.CharField(label='Тип имущества')
-    market_price = forms.IntegerField(label="Рыночная стоимость", min_value=0)
-    name = forms.CharField(label="Имя")
+    property_type = forms.CharField(label='Тип имущества (квартира, машина и тд)')
+    market_price = forms.IntegerField(label="Рыночная стоимость в рублях", min_value=0)
+    name = forms.CharField(label="Название")
     description = forms.CharField(label='Описание')
     class Meta:
         model = Property
