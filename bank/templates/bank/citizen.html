@@ -6,11 +6,13 @@
         <h1>Портал Гражданина</h1>
         {% if has_citizenship%}
             <h2 class="text-secondary">Тут вы можете зарегестрировать свое имущество и поучаствовать в общественной жизни страны.</h2>
-            <form method="post">
-                {% csrf_token %}
-                <h3>{{ form_property.as_p }}</h3>
-                <button class="btn btn-success btn-lg" type="submit">Добавить</button>
-            </form>
+            <div class="jumbotron">
+                <form method="post">
+                    {% csrf_token %}
+                    <h3>{{ form_property.as_p }}</h3>
+                    <button class="btn btn-success btn-lg" type="submit">Добавить</button>
+                </form>
+            </div>
         {% else %}
             {% if has_bank %}
                 <h2>Здесь вы можете подать документы на получение гражданства Черноруси.</h2>
