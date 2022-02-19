@@ -99,6 +99,7 @@ def citizen(request):
     has_citizenship = False
     citizenship = ''
     bank_account = ''
+    property_list = []
     try:
         bank_account = BankAccount.objects.get(user_id=request.user.id)
         has_bank = True
@@ -108,16 +109,18 @@ def citizen(request):
     try:
         citizenship = Citizen.objects.get(user_id=request.user.id)
         has_citizenship = True
+        property_list = Property.objects.filter(citizen_id=citizenship.id)
     except:
         has_citizenship = False
     form = getCitizenShip(request.POST or None)
-    form_property = RegisterProperty()
+    form_property = RegisterProperty(request.POST or None)
     citizen_dict = {
         'has_citizenship': has_citizenship,
         'citizenship': citizenship,
         'form': form,
         'has_bank': has_bank,
         'form_property': form_property,
+        'property_list': property_list,
     }
 
     if form.is_valid():
@@ -129,6 +132,13 @@ def citizen(request):
         askCitizenship = AskCitizenship(user_id=request.user.id, bank_account=bank_account, discord_name=discord_username, minecraft_name=minecraft_username, country=country)
         askCitizenship.save()
         return HttpResponseRedirect(reverse('bank:get_citizenship'))
+    if form_property.is_valid():
+        print("works")
+        citizen_property = form_property.save(commit=False)
+        citizen_property.citizen = citizenship
+        print(citizen_property)
+
+        citizen_property.save()
     return render(request, 'bank/citizen.html', context=citizen_dict)
 
 def get_citizenship(request):

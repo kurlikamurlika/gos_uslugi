@@ -6,6 +6,12 @@
         <h1>Портал Гражданина</h1>
         {% if has_citizenship%}
             <h2 class="text-secondary">Тут вы можете зарегестрировать свое имущество и поучаствовать в общественной жизни страны.</h2>
+            <h2>Ваше имущество:</h2>
+            <div class="bg-warning">
+                {% for item in property_list %}
+                    <h3>{{ forloop.counter }}. {{ item.property_type }}: {{ item.name }}; {{ item.description }} за {{ item.market_price }} рублей.</h3>
+                {% endfor %}
+            </div>
             <div class="jumbotron">
                 <form method="post">
                     {% csrf_token %}
