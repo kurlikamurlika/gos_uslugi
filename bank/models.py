@@ -6,7 +6,7 @@ from django.utils import timezone
 
 # Create your models here.
 class BankAccount(models.Model):
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     name = models.CharField(max_length=10, unique=True)
     balance = models.IntegerField(default=0)
     account_type = models.CharField(max_length=20, default='personal')
@@ -24,8 +24,8 @@ class Role(models.Model):
 
 
 class Transaction(models.Model):
-    sender = models.ForeignKey(BankAccount, on_delete=models.SET_NULL, blank=True, null=True, related_name='account_sender')
-    receiver = models.ForeignKey(BankAccount, on_delete=models.SET_NULL, blank=True, null=True, related_name='account_receiver')
+    sender = models.ForeignKey(BankAccount, on_delete=models.CASCADE, blank=True, null=True, related_name='account_sender')
+    receiver = models.ForeignKey(BankAccount, on_delete=models.CASCADE, blank=True, null=True, related_name='account_receiver')
     amount = models.IntegerField(default=0)
     pub_time = models.DateTimeField('Publication time')
 
@@ -34,8 +34,8 @@ class Transaction(models.Model):
 
 
 class Citizen(models.Model):
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
-    bank_account = models.ForeignKey(BankAccount, on_delete=models.SET_NULL, blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+    bank_account = models.ForeignKey(BankAccount, on_delete=models.CASCADE, blank=True, null=True)
     role = models.ManyToManyField(Role)
     discord_name = models.CharField(max_length=50, default='no')
     minecraft_name = models.CharField(max_length=16, default='no')
@@ -45,8 +45,8 @@ class Citizen(models.Model):
         return self.user.username
 
 class AskCitizenship(models.Model):
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
-    bank_account = models.ForeignKey(BankAccount, on_delete=models.SET_NULL, blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+    bank_account = models.ForeignKey(BankAccount, on_delete=models.CASCADE, blank=True, null=True)
     discord_name = models.CharField(max_length=50)
     minecraft_name = models.CharField(max_length=16)
     country = CountryField(default="no")
@@ -55,7 +55,7 @@ class AskCitizenship(models.Model):
         return self.user.username
 
 class Property(models.Model):
-    citizen = models.ForeignKey(Citizen, on_delete=models.SET_NULL, blank=True, null=True)
+    citizen = models.ForeignKey(Citizen, on_delete=models.CASCADE, blank=True, null=True)
     property_type = models.CharField(max_length=50)
     market_price = models.IntegerField(default=0)
     name = models.CharField(max_length=100)
