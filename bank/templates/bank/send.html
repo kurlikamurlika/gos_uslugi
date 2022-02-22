@@ -8,7 +8,7 @@
         <h2 class="text-secondary">Тут вы можете перевести свои деньги другому человеку.</h2>
         {% if has_bank %}
             <h3>Ваш баланс: {{ bank_account.balance }} рублей.</h3>
-            <div class="jumbotron m-5" id="send_money_code">
+            <div class="jumbotron" id="send_money_code">
                 <h4>Окно перевода на другой счёт по коду ЦБ</h4>
                 <form method="post" action="">
                     {% csrf_token %}
