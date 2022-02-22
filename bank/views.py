@@ -61,7 +61,7 @@ def send(request):
     if form.is_valid():
         receiver = form.cleaned_data.get("receiver")
         amount = int(form.cleaned_data.get('amount'))
-        if bank_account.balance > amount:
+        if bank_account.balance >= amount:
             try:
                 receiver_object = BankAccount.objects.get(name=receiver)
                 receiver_id = receiver_object.id
