@@ -63,3 +63,22 @@ class Property(models.Model):
 
     def __str__(self):
         return f'{self.citizen.user.username}_{self.property_type}_{self.market_price}'
+
+class JobOffer(models.Model):
+    employer = models.ForeignKey(User, on_delete=models.CASCADE)
+    job_name = models.CharField(max_length=50)
+    salary = models.IntegerField(default=0)
+    location = models.CharField(max_length=100, default='Черногорск')
+    description = models.TextField()
+    pub_time = models.DateTimeField(default=timezone.now())
+    def __str__(self):
+        return f'{self.job_name}_{self.employer.username}_{self.salary}'
+
+class Service(models.Model):
+    owner = models.ForeignKey(BankAccount, on_delete=models.CASCADE)
+    name = models.CharField(max_length=50)
+    price = models.IntegerField(default=0)
+    service_type = models.CharField(max_length=10) #подписка или разовая покупка
+
+    def __str__(self):
+        return f'{self.name}_{self.price}_{self.service_type}_{self.owner.user.username}'

@@ -124,26 +124,31 @@ def citizen(request):
     }
 
     if form.is_valid():
-        print("Works")
         minecraft_username = form.cleaned_data.get("minecraft_username")
         discord_username = form.cleaned_data.get("discord_username")
         country = form.cleaned_data.get('country')
-        print(country)
         askCitizenship = AskCitizenship(user_id=request.user.id, bank_account=bank_account, discord_name=discord_username, minecraft_name=minecraft_username, country=country)
         askCitizenship.save()
         return HttpResponseRedirect(reverse('bank:get_citizenship'))
     if form_property.is_valid():
-        print("works")
         citizen_property = form_property.save(commit=False)
         citizen_property.citizen = citizenship
-        print(citizen_property)
-
         citizen_property.save()
     return render(request, 'bank/citizen.html', context=citizen_dict)
 
 def get_citizenship(request):
-
     return render(request, 'bank/get_citizenship.html')
 
-def workspace(request):
-    return render(request, 'bank/workspace.html')
+def jobs(request):
+    form = JobOfferForm(request.POST or None)
+    job_list = JobOffer.objects.order_by('-pub_time')
+    jobs_dict = {
+        'form': form,
+        'job_list': job_list,
+    }
+    if form.is_valid():
+        job_offer = form.save(commit=False)
+        job_offer.employer = request.user
+        job_offer.save()
+        return HttpResponseRedirect(reverse('bank:index'))
+    return render(request, 'bank/jobs.html', context=jobs_dict)

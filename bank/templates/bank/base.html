@@ -28,7 +28,7 @@
                     <a class='nav-link' href="{% url 'bank:citizen' %}">Портал Гражданина</a>
                 </li>
                 <li class="nav-item">
-                    <a class='nav-link' href="{% url 'bank:workspace' %}">Рабочий кабинет</a>
+                    <a class='nav-link' href="{% url 'bank:jobs' %}">Работа</a>
                 </li>
             </ul>
             <div class="d-flex">
@@ -50,8 +50,12 @@
         </div>
 </nav>
 <div class="container mt-3">
+{% if user.is_authenticated %}
 {% block body_content %}
 {% endblock %}
+{% else %}
+<h1>Войдите в аккаунт для дальнейшего использования</h1>
+{% endif %}
 </div>
 </body>
 </html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+{% extends 'bank/base.html' %}
+{% block page_title %}Биржа Труда{% endblock %}
+{% block body_content %}
+    <h1>Биржа Труда Черноруси</h1>
+    <div class="mb-5">
+        <a class="btn btn-warning btn-lg" href="#job-offer">Предлжить вакансию</a>
+        <a class="btn btn-success btn-lg mx-5" href="#job-list">Поиск вакансий</a>
+    </div>
+    <div class="jumbotron" id="job-offer">
+        <h2>Форма создания вакансии</h2>
+        <form method="post">
+            {% csrf_token %}
+            <h3>{{ form.as_p }}</h3>
+            <button type="submit" class="btn btn-success btn-lg">Опубликовать</button>
+        </form>
+    </div>
+    <div id="job-list">
+        <h2>Список доступных вакансий</h2>
+        {% for job in job_list %}
+            <div class="jumbotron my-2">
+                <h4>Название: {{ job.job_name }}.</h4>
+                <h4>Работодатель: {{ job.employer.username }}.</h4>
+                <h4>Зарплата: {{ job.salary }} рублей.</h4>
+                <h4>Описание вакансии: {{ job.description }}</h4>
+                <h4>Дата публикации: {{ job.pub_time }}.</h4>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

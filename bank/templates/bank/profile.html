@@ -5,6 +5,9 @@
     {% if user.is_authenticated %}
         {% if user_profile.id == user.id %}
             <h1>Привет, {{ user.first_name }}!</h1>
+            {% if user.is_staff %}
+                <h4>Ваша рабочая панель: <a class="btn btn-primary btn-lg" href="{% url 'admin:index' %}">Рабочий кабинет</a></h4>
+            {% endif %}
             {% if no_account %}
                 <h3>Тут ты можешь создать свой банковский счет, с помощью которого сможешь воспользоваться ГосБанком!</h3>
                 <a class="btn btn-lg btn-success" href="{% url 'bank:bank_result' %}">Создать счёт</a>

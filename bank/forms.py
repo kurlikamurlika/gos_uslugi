@@ -33,4 +33,12 @@ class RegisterProperty(forms.ModelForm):
         model = Property
         fields = ('property_type', 'market_price', 'name', 'description')
 
+class JobOfferForm(forms.ModelForm):
+    job_name = forms.CharField(label='Название работы')
+    salary = forms.IntegerField(min_value=0, label='Зарплата в рублях')
+    location = forms.CharField(label="Расположение")
+    description = forms.CharField(widget=forms.Textarea, label="Описание работы")
+    class Meta:
+        model = JobOffer
+        exclude = ('employer', 'pub_time',)
 

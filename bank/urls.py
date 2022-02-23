@@ -11,6 +11,6 @@ urlpatterns = [
     path('citizen/', views.citizen, name='citizen'),
     path('bank_result/', views.bank_result, name='bank_result'),
     path('send_result/', views.send_result, name='send_result'),
-    path('workspace/', views.workspace, name='workspace'),
+    path('jobs/', views.jobs, name='jobs'),
     path('get_citizenship/', views.get_citizenship, name='get_citizenship')
 ]
