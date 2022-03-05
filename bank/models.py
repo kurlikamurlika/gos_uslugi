@@ -70,7 +70,7 @@ class JobOffer(models.Model):
     salary = models.IntegerField(default=0)
     location = models.CharField(max_length=100, default='Черногорск')
     description = models.TextField()
-    pub_time = models.DateTimeField(default=timezone.now())
+    pub_time = models.DateTimeField(default=timezone.now)
     def __str__(self):
         return f'{self.job_name}_{self.employer.username}_{self.salary}'
 
@@ -82,3 +82,14 @@ class Service(models.Model):
 
     def __str__(self):
         return f'{self.name}_{self.price}_{self.service_type}_{self.owner.user.username}'
+
+
+class Business(models.Model):
+    owner = models.ForeignKey(Citizen, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+    creation_date = models.DateTimeField(default=timezone.now)
+    bank_account = models.ForeignKey(BankAccount, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.name}_{self.bank_account.name}_{self.owner.user.username}'

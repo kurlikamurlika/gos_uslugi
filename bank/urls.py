@@ -12,5 +12,8 @@ urlpatterns = [
     path('bank_result/', views.bank_result, name='bank_result'),
     path('send_result/', views.send_result, name='send_result'),
     path('jobs/', views.jobs, name='jobs'),
-    path('get_citizenship/', views.get_citizenship, name='get_citizenship')
+    path('get_citizenship/', views.get_citizenship, name='get_citizenship'),
+    path('business_management/', views.business_management, name='business_management'),
+    path('business_management/loan/', views.loan, name='loan'),
+    path('business_management/fiscal_info/', views.fiscal_info, name='fiscal_info'),
 ]

@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>{% block page_title %}{% endblock %}</title>
+    <title>ГосУслуги | {% block page_title %}{% endblock %}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -30,6 +30,9 @@
                 <li class="nav-item">
                     <a class='nav-link' href="{% url 'bank:jobs' %}">Работа</a>
                 </li>
+                <li class="nav-item">
+                    <a class='nav-link' href="{% url 'bank:business_management' %}">Бизнес</a>
+                </li>
             </ul>
             <div class="d-flex">
                 {% if user.is_authenticated %}
@@ -49,6 +52,8 @@
             </div>
         </div>
 </nav>
+{% block extra_nav %}
+{% endblock %}
 <div class="container mt-3">
 {% if user.is_authenticated %}
 {% block body_content %}

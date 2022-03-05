@@ -19,7 +19,7 @@ def profile(request, user_id):
     transaction_get = ''
     transaction_send = ''
     try:
-        bank_acc = BankAccount.objects.get(user_id=user_id)
+        bank_acc = BankAccount.objects.filter(user_id=user_id).get(account_type='personal')
         no_account = False
         transaction_get = Transaction.objects.filter(receiver_id=bank_acc.id)
         transaction_send = Transaction.objects.filter(sender_id=bank_acc.id)
@@ -28,7 +28,7 @@ def profile(request, user_id):
     return render(request, 'bank/profile.html', context={'no_account': no_account, 'bank_acc': bank_acc, 'user_profile': user_profile, 'trans_get': transaction_get, 'trans_send': transaction_send})
 
 def bank_result(request):
-    name = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
+    name = 'PER' + ''.join(random.choices(string.ascii_uppercase + string.digits, k=7))
     bank = BankAccount(user_id=request.user.id, name=name, balance=0)
     bank.save()
     return HttpResponseRedirect(reverse('bank:profile', args=(request.user.id,)))
@@ -52,7 +52,7 @@ def send(request):
     bank_account = ''
     not_enough_money = False
     try:
-        bank_account = BankAccount.objects.get(user_id=request.user.id)
+        bank_account = BankAccount.objects.filter(user_id=request.user.id).get(account_type='personal')
         has_bank = True
     except:
         has_bank = False
@@ -101,7 +101,7 @@ def citizen(request):
     bank_account = ''
     property_list = []
     try:
-        bank_account = BankAccount.objects.get(user_id=request.user.id)
+        bank_account = BankAccount.objects.filter(user_id=request.user.id).get(account_type='personal')
         has_bank = True
     except:
         has_bank = False
@@ -149,6 +149,60 @@ def jobs(request):
     if form.is_valid():
         job_offer = form.save(commit=False)
         job_offer.employer = request.user
+        job_offer.pub_time = timezone.now()
         job_offer.save()
         return HttpResponseRedirect(reverse('bank:index'))
     return render(request, 'bank/jobs.html', context=jobs_dict)
+
+def business_management(request):
+    form = CreateBusinessForm(request.POST or None)
+    has_bank = ''
+    personal_bank_acc = ''
+    has_citizenship = ''
+    citizenship = ''
+    not_enough_money = False
+    has_business = False
+    try:
+        personal_bank_acc = BankAccount.objects.filter(user_id=request.user.id).get(account_type='personal')
+        has_bank = True
+    except:
+        has_bank = False
+    try:
+        citizenship = Citizen.objects.get(user_id=request.user.id)
+        has_citizenship = True
+    except:
+        has_citizenship = False
+    user_business = Business.objects.filter(owner_id=citizenship.id)
+    if len(user_business) > 0:
+        has_business = True
+    else:
+        has_business = False
+    if form.is_valid():
+        business = form.save(commit=False)
+        if personal_bank_acc.balance >= 1000:
+            business.owner = citizenship
+            business.creation_date = timezone.now()
+            name = 'BIZ' + ''.join(random.choices(string.ascii_uppercase + string.digits, k=7))
+            biz_bank_acc = BankAccount(user_id=request.user.id, name=name, balance=1000, account_type='business')
+            biz_bank_acc.save()
+            business.bank_account = biz_bank_acc
+            business.save()
+            print('works!!!')
+            personal_bank_acc.balance -= 1000
+            personal_bank_acc.save()
+        else:
+            not_enough_money = True
+    business_dict = {
+        'form': form,
+        'has_bank': has_bank,
+        'has_citizenship': has_citizenship,
+        'not_enough_money': not_enough_money,
+        'has_business': has_business,
+        'businesses': user_business,
+    }
+    return render(request, 'bank/business_management.html', context=business_dict)
+
+def loan(request):
+    return render(request, 'bank/loan.html')
+def fiscal_info(request):
+    return render(request, 'bank/fiscal_info.html')

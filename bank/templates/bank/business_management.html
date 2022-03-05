@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+{% extends 'bank/base.html' %}
+{% block page_title %}Управление бизнесом{% endblock %}
+{% block extra_nav %}
+<nav class="navbar navbar-expand-sm bg-secondary navbar-dark">
+  <div class="container-fluid">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'bank:business_management' %}">Панель управления</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'bank:loan' %}">Займ</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'bank:fiscal_info' %}">Налоги</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+{% endblock %}
+{% block body_content %}
+    <h1>Панель управления бизнесом</h1>
+    {% if has_business %}
+        <h2>Ваши бизнесы:</h2>
+        {% for business in businesses %}
+            <div class="jumbotron">
+                <h3>{{ forloop.counter }}. {{ business.name }}</h3>
+            </div>
+        {% endfor %}
+    {% endif %}
+    <hr>
+    <form method="post" class="jumbotron">
+        <h2>Форма создания бизнеса</h2>
+        <h5 class="text-secondary">Стоимость открытия нового бизнеса составляет 1000 рублей, который пойдут на ваш корпоративный счёт.</h5>
+        {% csrf_token %}
+        {% if has_bank %}
+            {% if has_citizenship %}
+                <h3>{{ form.as_p }}</h3>
+                {% if not_enough_money %}
+                    <h4 class="text-danger">У вас недостаточно средств для открытия бизнеса!</h4>
+                {% endif %}
+            {% else %}
+                <h3 class="text-danger">Сначала получите гражданство в Черноруси! Нажми <a href="{% url 'bank:citizen' %}">сюда</a></h3>
+            {% endif %}
+        {% else %}
+            <h3 class="text-danger">Создайте сначала банковский счёт! Нажми <a href="{% url 'bank:profile' user.id%}">сюда</a></h3>
+        {% endif %}
+        <input class="btn btn-lg btn-success" type="submit" value="Создать">
+    </form>
+{% endblock %}

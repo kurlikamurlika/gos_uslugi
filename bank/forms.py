@@ -42,3 +42,9 @@ class JobOfferForm(forms.ModelForm):
         model = JobOffer
         exclude = ('employer', 'pub_time',)
 
+class CreateBusinessForm(forms.ModelForm):
+    name = forms.CharField(label='Название компании')
+    description = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Введите описание вашего бизнеса, например, род деятельности, местоположение и целевую аудиторию.'}), label="Описание")
+    class Meta:
+        model = Business
+        exclude = ('owner', 'creation_date', 'bank_account')
