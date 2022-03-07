@@ -249,8 +249,8 @@ def business_detail(request, business_id):
         job_position.save()
     create_employee = CreateEmployee(request.POST or None)
     create_employee.fields['position'].queryset = JobPosition.objects.filter(business_id=business.id)
-    position_list = JobPosition.objects.filter(business_id=business.id)
-    emp_list = Employee.objects.filter(business_id=business.id)
+    position_list = JobPosition.objects.filter(business_id=business.id).order_by('-salary')
+    emp_list = Employee.objects.filter(business_id=business.id).order_by('-position')
 
     if create_employee.is_valid():
         employee = create_employee.save(commit=False)
