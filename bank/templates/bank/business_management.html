@@ -24,7 +24,7 @@
         <h2>Ваши бизнесы:</h2>
         {% for business in businesses %}
             <div class="jumbotron">
-                <h3>{{ forloop.counter }}. {{ business.name }}</h3>
+                <h3>{{ forloop.counter }}. <a href="{% url 'bank:business_detail' business.id %}">{{ business.name }}</a>: баланс - {{ business.bank_account.balance }} рублей.</h3>
             </div>
         {% endfor %}
     {% endif %}

@@ -16,4 +16,6 @@ urlpatterns = [
     path('business_management/', views.business_management, name='business_management'),
     path('business_management/loan/', views.loan, name='loan'),
     path('business_management/fiscal_info/', views.fiscal_info, name='fiscal_info'),
+    path('business_management/business_detail/<int:business_id>/', views.business_detail, name='business_detail'),
+    path('business_management/delete_employee/<int:employee_id>/', views.delete_employee, name='delete_employee'),
 ]

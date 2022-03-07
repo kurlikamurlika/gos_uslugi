@@ -206,3 +206,73 @@ def loan(request):
     return render(request, 'bank/loan.html')
 def fiscal_info(request):
     return render(request, 'bank/fiscal_info.html')
+def business_detail(request, business_id):
+    business = Business.objects.get(id=business_id)
+    send_money = SendMoney(request.POST or None)
+    bank_account = business.bank_account
+    works = True
+    not_enough_money = False
+
+    if send_money.is_valid():
+        receiver = send_money.cleaned_data.get("receiver")
+        amount = int(send_money.cleaned_data.get('amount'))
+        if bank_account.balance >= amount:
+            try:
+                receiver_object = BankAccount.objects.get(name=receiver)
+                receiver_id = receiver_object.id
+                trans = Transaction(sender_id=bank_account.id, receiver_id=receiver_id, amount=amount, pub_time=timezone.now())
+                bank_account.balance -= amount
+                receiver_object.balance += amount
+
+                bank_account.save()
+                receiver_object.save()
+                trans.save()
+
+                works = True
+            except:
+                works = False
+        else:
+            not_enough_money = True
+    income_trans = Transaction.objects.filter(receiver_id=bank_account.id)
+    revenue = 0
+    costs = 0
+    for trans in income_trans:
+        revenue += trans.amount
+    outcome_trans = Transaction.objects.filter(sender_id=bank_account.id)
+    for trans in outcome_trans:
+        costs += trans.amount
+    profit = revenue - costs
+    create_job_position = CreateJobPosition(request.POST or None)
+    if create_job_position.is_valid():
+        job_position = create_job_position.save(commit=False)
+        job_position.business = business
+        job_position.save()
+    create_employee = CreateEmployee(request.POST or None)
+    create_employee.fields['position'].queryset = JobPosition.objects.filter(business_id=business.id)
+    position_list = JobPosition.objects.filter(business_id=business.id)
+    emp_list = Employee.objects.filter(business_id=business.id)
+
+    if create_employee.is_valid():
+        employee = create_employee.save(commit=False)
+        employee.business = business
+        employee.save()
+    business_dict = {
+        'business': business,
+        'send_money': send_money,
+        'works': works,
+        'not_enough_money': not_enough_money,
+        'revenue': revenue,
+        'costs': costs,
+        'profit': profit,
+        'create_job_position': create_job_position,
+        'create_employee': create_employee,
+        'position_list': position_list,
+        'emp_list': emp_list,
+    }
+    return render(request, 'bank/business_detail.html', context=business_dict)
+
+def delete_employee(request, employee_id):
+    employee = Employee.objects.get(pk=employee_id)
+    name = employee.worker.user.username
+    employee.delete()
+    return render(request, 'bank/delete_employee.html', context={'name': name})

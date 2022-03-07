@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+{% extends 'bank/base.html' %}
+{% block page_title %}Информация о бизнесе{% endblock %}
+{% block body_content %}
+    <h1>{{ business.name }}</h1>
+    <h2 class="text-secondary">Панель управления предприятием</h2>
+    <div class="jumbotron" id="bank_info">
+        <h3>Банковская информация о бизнесе</h3>
+        <h4>Код ЦБ: {{ business.bank_account.name }}</h4>
+        <h4>Баланс: {{ business.bank_account.balance }} рублей.</h4>
+        <h3>Перевод средств на счёт</h3>
+        <div class="bg-warning p-2">
+            <form method="post" class="">
+                {% csrf_token %}
+                <h4>{{ send_money.as_p }}</h4>
+                <input type="submit" class="btn btn-lg btn-success" value="Перевести">
+            </form>
+            {% if not_enough_money %}
+                <h4 class="text-danger">У вас недостаточно денег на балансе для операции</h4>
+            {% endif %}
+            {% if works %}
+            {% else %}
+                <h4 class="text-danger">Указан неправильный код ЦБ получателя</h4>
+            {% endif %}
+        </div>
+    </div>
+    <div class="jumbotron bg-dark text-light" id="financial_info">
+        <h3>Финансовые показатели фирмы</h3>
+        <h4>Выручка за все время: <span class="text-success">{{ revenue }}</span> рублей.</h4>
+        <h4>Траты за все время: <span class="text-danger">{{ costs }}</span> рублей.</h4>
+        {% if profit > 0 %}
+            <h3 class="text-success">Чистая прибыль составляет {{ profit }} рублей.</h3>
+        {% else %}
+            <h3 class="text-danger">Чистый убыток составляет {{ profit }} рублей.</h3>
+        {% endif %}
+    </div>
+    <div class="jumbotron bg-secondary text-light" id="job_positions">
+        <h2>Должности в компании</h2>
+        <h3>Список должностей:</h3>
+        {% for position in position_list %}
+            <button class="btn btn-lg btn-primary" data-bs-toggle="collapse" data-bs-target="#position_{{ position.id }}">{{ position.name }}</button>
+            <div id="position_{{ position.id }}" class="collapse">
+                <h4>{{ position.description }}</h4>
+                <h4>Зарплата: {{ position.salary }} рублей.</h4>
+            </div>
+        {% endfor %}
+        <hr>
+        <div class="bg-warning">
+            <h3>Форма создания должности</h3>
+            <form method="post">
+                {% csrf_token %}
+                <h3>{{ create_job_position.as_p }}</h3>
+                <input type="submit" class="btn btn-lg btn-success m-3" value="Создать">
+            </form>
+        </div>
+    </div>
+    <div class="jumbotron" id="employees">
+        <h2>Сотрудники компании</h2>
+        <h3>Список сотрудников:</h3>
+        {% for emp in emp_list %}
+            <button class="btn btn-lg btn-primary" data-bs-toggle="collapse" data-bs-target="#emp_{{ emp.id }}">{{ emp.worker.user.username }}</button>
+            <button class="btn btn-lg btn-danger mx-3" data-bs-toggle="modal" data-bs-target="#modal_emp_{{ emp.id }}">Уволить</button>
+            <div class="modal" id="modal_emp_{{ emp.id }}">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Вы уверены, что хотите уволить {{ emp.worker.user.username }}?</h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <a class="btn btn-danger mx-3" href="{% url 'bank:delete_employee' emp.id %}">Да, уволить</a>
+                            <button type="button" class="btn btn-success" data-bs-dismiss="modal">Нет, закрыть</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="emp_{{ emp.id }}" class="collapse">
+                <h4>Должность: {{ emp.position.name }}</h4>
+                <h4>Зарплата: {{ emp.position.salary }} рублей.</h4>
+                <h4>Вступил в должность: {{ emp.hire_date }}</h4>
+            </div>
+        {% endfor %}
+        <hr>
+        <div class="jumbotron bg-warning">
+            <h3>Форма найма сотрудника</h3>
+            <form method="post">
+                {% csrf_token %}
+                <h3>{{ create_employee.as_p }}</h3>
+                <input type="submit" class="btn btn-lg btn-success m-3" value="Создать">
+            </form>
+        </div>
+    </div>
+{% endblock %}

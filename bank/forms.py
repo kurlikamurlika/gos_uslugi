@@ -48,3 +48,19 @@ class CreateBusinessForm(forms.ModelForm):
     class Meta:
         model = Business
         exclude = ('owner', 'creation_date', 'bank_account')
+
+class CreateJobPosition(forms.ModelForm):
+    name = forms.CharField(label="Название должности")
+    description = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Введите описание должности, требования и обязанности и тд.'}), label="Описание")
+    salary = forms.IntegerField(min_value=100, label='Зарплата в рублях за день')
+    class Meta:
+        model = JobPosition
+        exclude = ('business',)
+
+class CreateEmployee(forms.ModelForm):
+    position = forms.ModelChoiceField(label="Должность", queryset=JobPosition.objects.all()) #Надо как-то найти бизнес_айди
+    worker = forms.ModelChoiceField(label="Имя сотрудника", queryset=Citizen.objects.all())
+
+    class Meta:
+        model = Employee
+        exclude = ('business', 'hire_date')

@@ -74,16 +74,6 @@ class JobOffer(models.Model):
     def __str__(self):
         return f'{self.job_name}_{self.employer.username}_{self.salary}'
 
-class Service(models.Model):
-    owner = models.ForeignKey(BankAccount, on_delete=models.CASCADE)
-    name = models.CharField(max_length=50)
-    price = models.IntegerField(default=0)
-    service_type = models.CharField(max_length=10) #подписка или разовая покупка
-
-    def __str__(self):
-        return f'{self.name}_{self.price}_{self.service_type}_{self.owner.user.username}'
-
-
 class Business(models.Model):
     owner = models.ForeignKey(Citizen, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
@@ -93,3 +83,30 @@ class Business(models.Model):
 
     def __str__(self):
         return f'{self.name}_{self.bank_account.name}_{self.owner.user.username}'
+
+class JobPosition(models.Model):
+    business = models.ForeignKey(Business, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+    salary = models.IntegerField(default=100)
+
+    def __str__(self):
+        return f'{self.name}'
+
+class Employee(models.Model):
+    business = models.ForeignKey(Business, on_delete=models.CASCADE)
+    position = models.ForeignKey(JobPosition, on_delete=models.CASCADE)
+    worker = models.ForeignKey(Citizen, on_delete=models.CASCADE)
+    hire_date = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f'{self.worker.user.username}_{self.position.name}_{self.business.name}_{self.position.salary}'
+
+class Service(models.Model):
+    owner = models.ForeignKey(Business, on_delete=models.CASCADE)
+    name = models.CharField(max_length=50)
+    price = models.IntegerField(default=0)
+    service_type = models.CharField(max_length=10) #подписка или разовая покупка
+
+    def __str__(self):
+        return f'{self.name}_{self.price}_{self.service_type}_{self.owner.name}'
