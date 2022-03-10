@@ -203,7 +203,27 @@ def business_management(request):
     return render(request, 'bank/business_management.html', context=business_dict)
 
 def loan(request):
-    return render(request, 'bank/loan.html')
+    form = AskLoanForm(request.POST or None)
+    citizenship = Citizen.objects.get(user_id=request.user.id)
+    property_list = Property.objects.filter(citizen_id=citizenship.id)
+    capital = 0
+    for element in property_list:
+        capital += element.market_price
+    if form.is_valid():
+        ask_loan = form.save(commit=False)
+        ask_loan.loaner = citizenship
+        ask_loan.capital = capital
+        ask_loan.payback_date = timezone.now() + timedelta(ask_loan.period)
+        ask_loan.payback_sum = ask_loan.amount * ((1+ ask_loan.interest_rate.rate/100) ** ask_loan.period)
+        ask_loan.save()
+        return HttpResponseRedirect(reverse('bank:ask_loan', args=(ask_loan.id,)))
+
+    interest_rates = InterestRate.objects.all()
+    loan_dict = {
+        'form': form,
+        'interest_rates': list(interest_rates),
+    }
+    return render(request, 'bank/loan.html', context=loan_dict)
 def fiscal_info(request):
     return render(request, 'bank/fiscal_info.html')
 def business_detail(request, business_id):
@@ -276,3 +296,14 @@ def delete_employee(request, employee_id):
     name = employee.worker.user.username
     employee.delete()
     return render(request, 'bank/delete_employee.html', context={'name': name})
+
+def ask_loan(request, ask_loan_id):
+    ask_loan = AskLoan.objects.get(pk=ask_loan_id)
+    ask_loan_dict = {
+        'ask_loan': ask_loan
+    }
+    return render(request, 'bank/ask_loan.html', context=ask_loan_dict)
+def cancel_ask_loan(request, ask_loan_id):
+    ask_loan = AskLoan.objects.get(pk=ask_loan_id)
+    ask_loan.delete()
+    return render(request, 'bank/cancel_ask_loan.html')

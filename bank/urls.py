@@ -18,4 +18,6 @@ urlpatterns = [
     path('business_management/fiscal_info/', views.fiscal_info, name='fiscal_info'),
     path('business_management/business_detail/<int:business_id>/', views.business_detail, name='business_detail'),
     path('business_management/delete_employee/<int:employee_id>/', views.delete_employee, name='delete_employee'),
+    path('business_management/ask_loan<int:ask_loan_id>/', views.ask_loan, name='ask_loan'),
+    path('business_management/cancel_ask_loan<int:ask_loan_id>/', views.cancel_ask_loan, name='cancel_ask_loan'),
 ]

@@ -19,5 +19,17 @@
 </nav>
 {% endblock %}
 {% block body_content %}
-<h1>Банковские займы</h1>
+    <h1>Банковские займы</h1>
+    <h2 class="text-secondary">Тут вы можете оформить займ для различных целей.</h2>
+    <div class="jumbotron">
+        <h2>Оформление займа</h2>
+        <form method="post">
+            {% csrf_token %}
+            <h3>{{ form.interest_rate.label_tag }} {{ form.interest_rate }}</h3>
+            <h3>{{ form.amount.label_tag }} {{ form.amount }}</h3>
+            <h3>{{ form.period.label_tag }} {{ form.period }}</h3>
+            <input type="submit" class="btn btn-lg btn-success" value="Подать заявку">
+        </form>
+    </div>
+
 {% endblock %}

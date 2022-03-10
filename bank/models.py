@@ -2,6 +2,7 @@ from django.db import models
 from django_countries.fields import CountryField
 from django.contrib.auth.models import User
 from django.utils import timezone
+from datetime import timedelta
 
 
 # Create your models here.
@@ -110,3 +111,36 @@ class Service(models.Model):
 
     def __str__(self):
         return f'{self.name}_{self.price}_{self.service_type}_{self.owner.name}'
+
+class InterestRate(models.Model):
+    service_type = models.CharField(max_length=50)
+    rate = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f'{self.service_type}. Ставка: {self.rate}% дневных'
+
+class AskLoan(models.Model):
+    loaner = models.ForeignKey(Citizen, on_delete=models.CASCADE)
+    interest_rate = models.ForeignKey(InterestRate, on_delete=models.CASCADE)
+    amount = models.IntegerField(default=0)
+    capital = models.IntegerField(default=0)
+    period = models.IntegerField(default=0)
+    start_date = models.DateTimeField(default=timezone.now)
+    payback_date = models.DateTimeField(default= timezone.now)
+    payback_sum = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f'{self.loaner.user.username}_{self.interest_rate.rate}_{self.capital}_{self.payback_sum}_{self.payback_date}'
+
+class Loan(models.Model):
+    loaner = models.ForeignKey(Citizen, on_delete=models.CASCADE)
+    interest_rate = models.ForeignKey(InterestRate, on_delete=models.CASCADE)
+    amount = models.IntegerField(default=0)
+    capital = models.IntegerField(default=0)
+    period = models.IntegerField(default=0)
+    start_date = models.DateTimeField(default=timezone.now)
+    payback_date = models.DateTimeField(default=timezone.now)
+    payback_sum = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f'{self.loaner.user.username}_{self.interest_rate.rate}_{self.capital}_{self.payback_sum}_{self.payback_date}'

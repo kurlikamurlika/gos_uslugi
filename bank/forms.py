@@ -64,3 +64,11 @@ class CreateEmployee(forms.ModelForm):
     class Meta:
         model = Employee
         exclude = ('business', 'hire_date')
+
+class AskLoanForm(forms.ModelForm):
+    interest_rate = forms.ModelChoiceField(queryset=InterestRate.objects.all(), label="Тип займа")
+    amount = forms.IntegerField(min_value=100, label="Сумма в рублях")
+    period = forms.IntegerField(min_value=1, label="Срок выплаты в днях")
+    class Meta:
+        model = AskLoan
+        exclude = ('loaner', 'capital', 'start_date', 'payback_date', 'payback_sum')

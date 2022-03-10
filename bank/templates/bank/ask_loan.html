@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+{% extends 'bank/base.html' %}
+{% block page_title %}Заявка на займ{% endblock %}
+{% block body_content %}
+    <h1>Вы успешно оформили заявку на получение займа, в ближайшее время заявка будет рассмотрена!</h1>
+    <div class="jumbotron">
+        <h2>Заявка на кредит</h2>
+        <h3>Тип кредита: {{ ask_loan.interest_rate }}.</h3>
+        <h3>Сумма: {{ ask_loan.amount }} рублей.</h3>
+        <h3>Срок: {{ ask_loan.period }} дней.</h3>
+        <h3>Сумма возврата: {{ ask_loan.payback_sum }} рублей.</h3>
+        <h3>Дата оформления: {{ ask_loan.start_date }}</h3>
+        <h3>Дата полного возврата: {{ ask_loan.payback_date }}</h3>
+        <h2>Вас устраивают условия?</h2>
+        <a class="btn btn-lg btn-success" href="{% url 'bank:business_management' %}">Да</a>
+        <a class="btn btn-lg btn-danger m-3" href="{% url 'bank:cancel_ask_loan' ask_loan.id %}">Нет</a>
+    </div>
+{% endblock %}
