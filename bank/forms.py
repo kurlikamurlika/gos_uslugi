@@ -72,3 +72,11 @@ class AskLoanForm(forms.ModelForm):
     class Meta:
         model = AskLoan
         exclude = ('loaner', 'capital', 'start_date', 'payback_date', 'payback_sum')
+
+class CreateService(forms.ModelForm):
+    name = forms.CharField(label="Название")
+    price = forms.IntegerField(min_value=10, label="Цена в рублях")
+    service_type = forms.ChoiceField(label="Товар или услуга", choices=[('товар', "Товар"),("услуга", "Услуга")])
+    class Meta:
+        model = Service
+        exclude = ('owner',)

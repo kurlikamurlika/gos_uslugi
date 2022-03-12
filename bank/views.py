@@ -207,6 +207,7 @@ def loan(request):
     citizenship = Citizen.objects.get(user_id=request.user.id)
     property_list = Property.objects.filter(citizen_id=citizenship.id)
     capital = 0
+    loan_list = Loan.objects.filter(loaner_id=citizenship.id)
     for element in property_list:
         capital += element.market_price
     if form.is_valid():
@@ -221,7 +222,7 @@ def loan(request):
     interest_rates = InterestRate.objects.all()
     loan_dict = {
         'form': form,
-        'interest_rates': list(interest_rates),
+        'loan_list': loan_list,
     }
     return render(request, 'bank/loan.html', context=loan_dict)
 def fiscal_info(request):
@@ -229,10 +230,15 @@ def fiscal_info(request):
 def business_detail(request, business_id):
     business = Business.objects.get(id=business_id)
     send_money = SendMoney(request.POST or None)
+    create_service = CreateService(request.POST or None)
     bank_account = business.bank_account
     works = True
     not_enough_money = False
-
+    employee_list = Employee.objects.filter(business_id=business)
+    employee_bank_acc_list = []
+    for employee in employee_list:
+        employee_bank_acc_list.append(employee.worker.bank_account.id)
+    central_bank = BankAccount.objects.get(name="GOV9G632R2")
     if send_money.is_valid():
         receiver = send_money.cleaned_data.get("receiver")
         amount = int(send_money.cleaned_data.get('amount'))
@@ -240,13 +246,26 @@ def business_detail(request, business_id):
             try:
                 receiver_object = BankAccount.objects.get(name=receiver)
                 receiver_id = receiver_object.id
-                trans = Transaction(sender_id=bank_account.id, receiver_id=receiver_id, amount=amount, pub_time=timezone.now())
-                bank_account.balance -= amount
-                receiver_object.balance += amount
-
-                bank_account.save()
-                receiver_object.save()
-                trans.save()
+                if receiver_id in employee_bank_acc_list:
+                    direct_amount = int(amount * 0.95)
+                    tax_amount = int(amount / 20)
+                    trans_direct = Transaction(sender_id=bank_account.id, receiver_id=receiver_id, amount=direct_amount, pub_time=timezone.now())
+                    trans_tax = Transaction(sender_id=bank_account.id, receiver_id=central_bank.id, amount=tax_amount, pub_time=timezone.now())
+                    bank_account.balance -= amount
+                    receiver_object.balance += direct_amount
+                    central_bank.balance += tax_amount
+                    trans_direct.save()
+                    trans_tax.save()
+                    bank_account.save()
+                    receiver_object.save()
+                    central_bank.save()
+                else:
+                    trans = Transaction(sender_id=bank_account.id, receiver_id=receiver_id, amount=amount, pub_time=timezone.now())
+                    bank_account.balance -= amount
+                    receiver_object.balance += amount
+                    bank_account.save()
+                    receiver_object.save()
+                    trans.save()
 
                 works = True
             except:
@@ -276,6 +295,11 @@ def business_detail(request, business_id):
         employee = create_employee.save(commit=False)
         employee.business = business
         employee.save()
+    if create_service.is_valid():
+        service = create_service.save(commit=False)
+        service.owner = business
+        service.save()
+    service_list = Service.objects.filter(owner_id=business.id).order_by('-price')
     business_dict = {
         'business': business,
         'send_money': send_money,
@@ -288,6 +312,8 @@ def business_detail(request, business_id):
         'create_employee': create_employee,
         'position_list': position_list,
         'emp_list': emp_list,
+        'create_service': create_service,
+        'service_list': service_list,
     }
     return render(request, 'bank/business_detail.html', context=business_dict)
 

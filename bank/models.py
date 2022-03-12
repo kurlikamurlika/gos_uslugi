@@ -35,7 +35,7 @@ class Transaction(models.Model):
 
 
 class Citizen(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
     bank_account = models.ForeignKey(BankAccount, on_delete=models.CASCADE, blank=True, null=True)
     role = models.ManyToManyField(Role)
     discord_name = models.CharField(max_length=50, default='no')
@@ -105,9 +105,13 @@ class Employee(models.Model):
 
 class Service(models.Model):
     owner = models.ForeignKey(Business, on_delete=models.CASCADE)
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=500)
     price = models.IntegerField(default=0)
-    service_type = models.CharField(max_length=10) #подписка или разовая покупка
+    SERVICE_TYPE_CHOICES = [
+        ('товар', "Товар"),
+        ("услуга", "Услуга"),
+    ]
+    service_type = models.CharField(max_length=100, default=SERVICE_TYPE_CHOICES[0][0], choices=SERVICE_TYPE_CHOICES) #подписка или разовая покупка
 
     def __str__(self):
         return f'{self.name}_{self.price}_{self.service_type}_{self.owner.name}'
@@ -141,6 +145,9 @@ class Loan(models.Model):
     start_date = models.DateTimeField(default=timezone.now)
     payback_date = models.DateTimeField(default=timezone.now)
     payback_sum = models.IntegerField(default=0)
+    remained_sum = models.IntegerField(default=0)
+    paid_sum = models.IntegerField(default=0)
 
     def __str__(self):
         return f'{self.loaner.user.username}_{self.interest_rate.rate}_{self.capital}_{self.payback_sum}_{self.payback_date}'
+

@@ -6,18 +6,22 @@
         <h1>Портал Гражданина</h1>
         {% if has_citizenship%}
             <h2 class="text-secondary">Тут вы можете зарегестрировать свое имущество и поучаствовать в общественной жизни страны.</h2>
-            <h2>Ваше имущество:</h2>
-            <div class="bg-warning btn my-3">
-                {% for item in property_list %}
-                    <h3>{{ forloop.counter }}. {{ item.property_type }}: {{ item.name }}; {{ item.description }} за {{ item.market_price }} рублей.</h3>
-                {% endfor %}
-            </div>
-            <div class="jumbotron">
-                <form method="post">
-                    {% csrf_token %}
-                    <h3>{{ form_property.as_p }}</h3>
-                    <button class="btn btn-success btn-lg" type="submit">Добавить</button>
-                </form>
+            <button data-bs-toggle="collapse" data-bs-target="#properties-info" class="btn btn-lg btn-warning">Имущество</button>
+            <a class="btn btn-lg btn-info m-3" href="{% url 'bank:business_management' %}">Управление бизнесом</a>
+            <div id="properties-info" class="collapse">
+                <h2>Ваше имущество:</h2>
+                <div class="bg-warning btn my-3">
+                    {% for item in property_list %}
+                        <h3>{{ forloop.counter }}. {{ item.property_type }}: {{ item.name }}; {{ item.description }} за {{ item.market_price }} рублей.</h3>
+                    {% endfor %}
+                </div>
+                <div class="jumbotron">
+                    <form method="post">
+                        {% csrf_token %}
+                        <h3>{{ form_property.as_p }}</h3>
+                        <button class="btn btn-success btn-lg" type="submit">Добавить</button>
+                    </form>
+                </div>
             </div>
         {% else %}
             {% if has_bank %}

@@ -31,5 +31,13 @@
             <input type="submit" class="btn btn-lg btn-success" value="Подать заявку">
         </form>
     </div>
-
+    <h2>Ваши займы:</h2>
+    {% for loan in loan_list %}
+        <div class="jumbotron bg-dark text-light">
+            <h3>Тип кредита: {{ loan.interest_rate }}.</h3>
+            <h3>Вы взяли {{ loan.amount }} рублей {{ loan.start_date }}.</h3>
+            <h3>В итоге вам надо выплатить {{ loan.payback_sum }} рублей {{ loan.payback_date }}.</h3>
+            <h3>На данный момент вы уже выплатили {{ loan.paid_sum }} рублей, а осталось выплатить {{ loan.remained_sum }} рублей.</h3>
+        </div>
+    {% endfor %}
 {% endblock %}

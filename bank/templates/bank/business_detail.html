@@ -90,4 +90,18 @@
             </form>
         </div>
     </div>
+    <div class="jumbotron" id="services">
+        <h2>Ваша витрина:</h2>
+        {% for service in service_list %}
+            <div class="jumbotron bg-dark text-light">
+                <h3>{{ forloop.counter }}. {{ service.name }} за {{ service.price }} рублей.</h3>
+            </div>
+        {% endfor %}
+        <div class="jumbotron bg-warning"><form method="post">
+            <h2>Форма расширения витрины</h2>
+            {% csrf_token %}
+            <h3>{{ create_service.as_p }}</h3>
+            <input type="submit" class="btn btn-lg btn-success m-3" value="Создать">
+        </form></div>
+    </div>
 {% endblock %}
