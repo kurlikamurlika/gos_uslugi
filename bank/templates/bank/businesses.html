@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+{% extends 'bank/base.html' %}
+{% block page_title %}Бизнесы{% endblock %}
+{% block body_content %}
+    <h1>Бизнесы Черноруси</h1>
+    {% for business in business_list %}
+        <div class="jumbotron bg-{% cycle 'warning' 'info' %}">
+            <h2>{{ business.name }}</h2>
+            <h3>Владелец: {{ business.owner.user.username }}</h3>
+            <h3>{{ business.description }}</h3>
+            <button class="btn btn-lg btn-primary" data-bs-toggle="collapse" data-bs-target="#services_{{ business.id }}">Витрина компании</button>
+            <div class="collapse" id="services_{{ business.id }}">
+                {% for service in business.service_set.all %}
+                    <div class="jumbotron bg-dark text-light my-2">
+                        <h4>Название: {{ service.name }}.</h4>
+                        <h4>Цена за 1шт: {{ service.price }} рублей.</h4>
+                        <a class="btn btn-lg btn-success" href="{% url 'bank:make_order' service.id %}">Купить</a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}

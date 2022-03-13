@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+{% extends 'bank/base.html' %}
+{% block page_title %}Покупка товара у бизнеса{% endblock %}
+{% block body_content %}
+    <h1>Оплата</h1>
+    <div class="jumbotron">
+        <h2>Товар: {{ service.name }}.</h2>
+        <h2>Цена за 1 шт: {{ service.price }} рублей.</h2>
+        <h2>Ваш баланс: {{ bank_acc.balance }} рублей.</h2>
+        <form method="post">
+            {% csrf_token %}
+            <h2>{{ form.as_p }}</h2>
+            {% if not_enough_money %}
+                <h2 class="text-danger">У вас недостаточно средств для покупки</h2>
+            {% endif %}
+            <input type="submit" value="Подтвердить платеж" class="btn btn-lg btn-success">
+        </form>
+    </div>
+{% endblock %}

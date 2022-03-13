@@ -85,6 +85,7 @@ def send(request):
         'form': form,
         'works': works,
         'not_enough_money': not_enough_money,
+        "exchange_rates": ExchangeRate.objects.all(),
     }
     return render(request, 'bank/send.html', context=send_dict)
 
@@ -314,6 +315,7 @@ def business_detail(request, business_id):
         'emp_list': emp_list,
         'create_service': create_service,
         'service_list': service_list,
+        'tax_income': 10,
     }
     return render(request, 'bank/business_detail.html', context=business_dict)
 
@@ -333,3 +335,44 @@ def cancel_ask_loan(request, ask_loan_id):
     ask_loan = AskLoan.objects.get(pk=ask_loan_id)
     ask_loan.delete()
     return render(request, 'bank/cancel_ask_loan.html')
+def businesses(request):
+    business_list = Business.objects.all().order_by('name')
+    view_dict = {
+        'business_list': business_list,
+    }
+    return render(request, 'bank/businesses.html', context=view_dict)
+def make_order(request, service_id):
+    service = Service.objects.get(pk=service_id)
+    form = MakeOrder(request.POST or None)
+    bank_acc = BankAccount.objects.filter(user_id=request.user).filter(name__startswith="PER")[0]
+    not_enough_money = False
+    if form.is_valid():
+        order = form.save(commit=False)
+        order.service = service
+        order.total_cost = order.amount * service.price
+        order.buyer = request.user
+        if bank_acc.balance >= order.total_cost:
+            not_enough_money = False
+            direct_payment = int(order.total_cost * 0.9)
+            tax_payment = int(order.total_cost * 0.1)
+            central_bank = BankAccount.objects.get(name="GOV9G632R2")
+            trans_direct = Transaction(sender_id=bank_acc.id, receiver_id=service.owner.bank_account.id, amount=direct_payment)
+            trans_tax = Transaction(sender_id=bank_acc.id, receiver_id=central_bank.id, amount=tax_payment)
+            bank_acc.balance -= order.total_cost
+            service.owner.bank_account.balance += direct_payment
+            central_bank.balance += tax_payment
+            trans_direct.save()
+            trans_tax.save()
+            order.save()
+            bank_acc.save()
+            service.owner.bank_account.save()
+            central_bank.save()
+        else:
+            not_enough_money = True
+    order_dict = {
+        'service': service,
+        'form': form,
+        'bank_acc': bank_acc,
+        'not_enough_money': not_enough_money,
+    }
+    return render(request, 'bank/make_order.html', context=order_dict)

@@ -80,3 +80,9 @@ class CreateService(forms.ModelForm):
     class Meta:
         model = Service
         exclude = ('owner',)
+
+class MakeOrder(forms.ModelForm):
+    amount = forms.IntegerField(min_value=1, label="Количество")
+    class Meta:
+        model = Order
+        fields = ('amount',)

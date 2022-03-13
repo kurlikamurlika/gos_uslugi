@@ -28,7 +28,7 @@ class Transaction(models.Model):
     sender = models.ForeignKey(BankAccount, on_delete=models.CASCADE, blank=True, null=True, related_name='account_sender')
     receiver = models.ForeignKey(BankAccount, on_delete=models.CASCADE, blank=True, null=True, related_name='account_receiver')
     amount = models.IntegerField(default=0)
-    pub_time = models.DateTimeField('Publication time')
+    pub_time = models.DateTimeField('Publication time', default=timezone.now)
 
     def __str__(self):
         return f'{self.sender.name}_{self.receiver.name}_{self.amount}'
@@ -151,3 +151,20 @@ class Loan(models.Model):
     def __str__(self):
         return f'{self.loaner.user.username}_{self.interest_rate.rate}_{self.capital}_{self.payback_sum}_{self.payback_date}'
 
+class Order(models.Model):
+    service = models.ForeignKey(Service, on_delete=models.CASCADE)
+    amount = models.IntegerField(default=1)
+    total_cost = models.IntegerField(default=0)
+    buy_date = models.DateTimeField(default=timezone.now)
+    buyer = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+
+    def __str__(self):
+        return f'{self.service.name}_{self.amount}_{self.total_cost} рублей'
+
+class ExchangeRate(models.Model):
+    resource = models.CharField(max_length=100)
+    rate = models.IntegerField(default=1)
+    last_update = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f'Курс {self.resource} к CHR {self.rate} рублей.'

@@ -24,6 +24,13 @@
                     <h4 class="text-danger">Указан неправильный код ЦБ получателя</h4>
                 {% endif %}
             </div>
+            <h2>Курс валют по Центральному Банку</h2>
+            {% for exchange_rate in exchange_rates %}
+                <div class="jumbotron bg-{% cycle 'warning' 'info' 'primary' %}">
+                    <h3>1 {{ exchange_rate.resource }} к  {{ exchange_rate.rate }} CHR. Последнее обновление: {{ exchange_rate.last_update }}.</h3>
+                </div>
+            {% endfor %}
+            <h4>CHR - Чернорусский рубль</h4>
         {% else %}
             <h1 class="text-warning">Сначала создайте себе банковский счёт <a class="" href="{% url 'bank:profile' user.id %}">здесь</a>.</h1>
         {% endif %}

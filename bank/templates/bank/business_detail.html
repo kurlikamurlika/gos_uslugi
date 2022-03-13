@@ -4,7 +4,13 @@
 {% block body_content %}
     <h1>{{ business.name }}</h1>
     <h2 class="text-secondary">Панель управления предприятием</h2>
-    <div class="jumbotron" id="bank_info">
+    <button data-bs-toggle="collapse" data-bs-target="#bank_info" class="btn btn-lg btn-primary m-3">Перевод средств на счет</button>
+    <button data-bs-toggle="collapse" data-bs-target="#financial_info" class="btn btn-lg btn-warning m-3">Финансовые показатели</button>
+    <button data-bs-toggle="collapse" data-bs-target="#job_positions" class="btn btn-lg btn-danger m-3">Должности</button>
+    <button data-bs-toggle="collapse" data-bs-target="#employees" class="btn btn-lg btn-info m-3">Сотрудники</button>
+    <button data-bs-toggle="collapse" data-bs-target="#services" class="btn btn-lg btn-success m-3">Ассортимент</button>
+    <button data-bs-toggle="collapse" data-bs-target="#orders" class="btn btn-lg btn-dark m-3">Продажи</button>
+    <div class="jumbotron collapse" id="bank_info">
         <h3>Банковская информация о бизнесе</h3>
         <h4>Код ЦБ: {{ business.bank_account.name }}</h4>
         <h4>Баланс: {{ business.bank_account.balance }} рублей.</h4>
@@ -24,7 +30,7 @@
             {% endif %}
         </div>
     </div>
-    <div class="jumbotron bg-dark text-light" id="financial_info">
+    <div class="jumbotron bg-dark text-light collapse" id="financial_info">
         <h3>Финансовые показатели фирмы</h3>
         <h4>Выручка за все время: <span class="text-success">{{ revenue }}</span> рублей.</h4>
         <h4>Траты за все время: <span class="text-danger">{{ costs }}</span> рублей.</h4>
@@ -34,7 +40,7 @@
             <h3 class="text-danger">Чистый убыток составляет {{ profit }} рублей.</h3>
         {% endif %}
     </div>
-    <div class="jumbotron bg-secondary text-light" id="job_positions">
+    <div class="jumbotron bg-secondary text-light collapse" id="job_positions">
         <h2>Должности в компании</h2>
         <h3>Список должностей:</h3>
         {% for position in position_list %}
@@ -54,7 +60,7 @@
             </form>
         </div>
     </div>
-    <div class="jumbotron" id="employees">
+    <div class="jumbotron collapse" id="employees">
         <h2>Сотрудники компании</h2>
         <h3>Список сотрудников:</h3>
         {% for emp in emp_list %}
@@ -90,7 +96,7 @@
             </form>
         </div>
     </div>
-    <div class="jumbotron" id="services">
+    <div class="jumbotron collapse" id="services">
         <h2>Ваша витрина:</h2>
         {% for service in service_list %}
             <div class="jumbotron bg-dark text-light">
@@ -103,5 +109,14 @@
             <h3>{{ create_service.as_p }}</h3>
             <input type="submit" class="btn btn-lg btn-success m-3" value="Создать">
         </form></div>
+    </div>
+    <div class="jumbotron collapse" id="orders">
+        <h2>Ваши заказы:</h2>
+        {% for service in service_list %}
+            {% for order in service.order_set.all %}
+                <h3>{{ order.buyer }} купил {{ order.amount }} штук {{ order.service.name }} за {{ order.total_cost }} рублей.</h3>
+                <h4>Налог в {{ tax_income }}% оплачен</h4>
+            {% endfor %}
+        {% endfor %}
     </div>
 {% endblock %}
