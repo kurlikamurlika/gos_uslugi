@@ -6,7 +6,7 @@
         <h1>Портал Гражданина</h1>
         {% if has_citizenship%}
             <h2 class="text-secondary">Тут вы можете зарегестрировать свое имущество и поучаствовать в общественной жизни страны.</h2>
-            <button data-bs-toggle="collapse" data-bs-target="#properties-info" class="btn btn-lg btn-warning">Имущество</button>
+            <button data-bs-toggle="collapse" data-bs-target="#properties-info" class="btn btn-lg btn-warning m-3">Имущество</button>
             <a class="btn btn-lg btn-info m-3" href="{% url 'bank:business_management' %}">Управление бизнесом</a>
             <div id="properties-info" class="collapse">
                 <h2>Ваше имущество:</h2>
