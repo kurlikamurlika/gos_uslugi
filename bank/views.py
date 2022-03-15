@@ -376,3 +376,6 @@ def make_order(request, service_id):
         'not_enough_money': not_enough_money,
     }
     return render(request, 'bank/make_order.html', context=order_dict)
+
+def laws(request):
+    return render(request, 'bank/laws.html')

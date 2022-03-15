@@ -28,7 +28,7 @@ class RegisterProperty(forms.ModelForm):
     property_type = forms.CharField(label='Тип имущества (квартира, машина и тд)')
     market_price = forms.IntegerField(label="Рыночная стоимость в рублях", min_value=0)
     name = forms.CharField(label="Название")
-    description = forms.CharField(widget=forms.Textarea(attrs={'rows': 5, 'cols': 30, 'placeholder': 'Описание объекта'}), label='Описание')
+    description = forms.CharField(widget=forms.Textarea(attrs={'rows': 5, 'cols': 20, 'placeholder': 'Описание объекта'}), label='Описание')
     class Meta:
         model = Property
         fields = ('property_type', 'market_price', 'name', 'description')
@@ -37,21 +37,21 @@ class JobOfferForm(forms.ModelForm):
     job_name = forms.CharField(label='Название работы')
     salary = forms.IntegerField(min_value=0, label='Зарплата в рублях')
     location = forms.CharField(label="Расположение")
-    description = forms.CharField(widget=forms.Textarea(attrs={'rows': 5, 'cols': 30, 'placeholder': 'Введите описание вакансии, что надо будет делать сотруднику и тд.'}), label="Описание работы")
+    description = forms.CharField(widget=forms.Textarea(attrs={'rows': 5, 'cols': 20, 'placeholder': 'Введите описание вакансии, что надо будет делать сотруднику и тд.'}), label="Описание работы")
     class Meta:
         model = JobOffer
         exclude = ('employer', 'pub_time',)
 
 class CreateBusinessForm(forms.ModelForm):
     name = forms.CharField(label='Название компании')
-    description = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Введите описание вашего бизнеса, например, род деятельности, местоположение и целевую аудиторию.', 'rows': 5, 'cols': 30}), label="Описание")
+    description = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Введите описание вашего бизнеса, например, род деятельности, местоположение и целевую аудиторию.', 'rows': 5, 'cols': 20}), label="Описание")
     class Meta:
         model = Business
         exclude = ('owner', 'creation_date', 'bank_account')
 
 class CreateJobPosition(forms.ModelForm):
     name = forms.CharField(label="Название должности")
-    description = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Введите описание должности, требования и обязанности и тд.', 'rows': 5, 'cols': 30}), label="Описание")
+    description = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Введите описание должности, требования и обязанности и тд.', 'rows': 5, 'cols': 20}), label="Описание")
     salary = forms.IntegerField(min_value=100, label='Зарплата в рублях за день')
     class Meta:
         model = JobPosition
