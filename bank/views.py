@@ -11,7 +11,19 @@ from django.utils import timezone
 
 # Create your views here.
 def index(request):
-    return render(request, 'bank/index.html')
+    all_emp = Employee.objects.all()
+    total_money = 0
+    count = 0
+    for emp in all_emp:
+        total_money += emp.position.salary
+        count += 1
+    average_salary = total_money // count
+    central_bank = BankAccount.objects.get(name="GOV9G632R2")
+    index_dict = {
+        'average_salary': average_salary,
+        'central_bank': central_bank,
+    }
+    return render(request, 'bank/index.html', context=index_dict)
 
 def profile(request, user_id):
     user_profile = User.objects.get(pk=user_id)

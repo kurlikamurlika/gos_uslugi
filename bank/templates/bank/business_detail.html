@@ -113,10 +113,16 @@
     <div class="jumbotron collapse" id="orders">
         <h2>Ваши заказы:</h2>
         {% for service in service_list %}
+            <div class="jumbotron bg-dark text-light">
+                <h2>{{ service.name }}</h2>
             {% for order in service.order_set.all %}
-                <h3>{{ order.buyer }} купил {{ order.amount }} штук {{ order.service.name }} за {{ order.total_cost }} рублей.</h3>
-                <h4>Налог в {{ tax_income }}% оплачен</h4>
+                <div class="jumbotron text-dark bg-{% cycle 'warning' 'info' 'danger'%}">
+                    <h3>{{ order.buyer }} купил {{ order.amount }} штук за {{ order.total_cost }} рублей.</h3>
+                    <h3>Куплен: {{ order.buy_date }}</h3>
+                    <h4>Налог в {{ tax_income }}% оплачен</h4>
+                </div>
             {% endfor %}
+            </div>
         {% endfor %}
     </div>
 {% endblock %}
