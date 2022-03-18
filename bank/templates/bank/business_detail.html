@@ -43,7 +43,7 @@
     <div class="jumbotron bg-secondary text-light collapse" id="job_positions">
         <h2>Должности в компании</h2>
         <h3>Список должностей:</h3>
-        {% for position in position_list %}
+        {% for position in business.job_positions.all %}
             <button class="btn btn-lg btn-primary" data-bs-toggle="collapse" data-bs-target="#position_{{ position.id }}">{{ position.name }}</button>
             <div id="position_{{ position.id }}" class="collapse">
                 <h4>{{ position.description }}</h4>
@@ -63,7 +63,7 @@
     <div class="jumbotron collapse" id="employees">
         <h2>Сотрудники компании</h2>
         <h3>Список сотрудников:</h3>
-        {% for emp in emp_list %}
+        {% for emp in business.employees.all %}
             <button class="btn btn-lg btn-primary" data-bs-toggle="collapse" data-bs-target="#emp_{{ emp.id }}">{{ emp.worker.user.username }}</button>
             <button class="btn btn-lg btn-danger mx-3" data-bs-toggle="modal" data-bs-target="#modal_emp_{{ emp.id }}">Уволить</button>
             <div class="modal" id="modal_emp_{{ emp.id }}">
@@ -98,10 +98,12 @@
     </div>
     <div class="jumbotron collapse" id="services">
         <h2>Ваша витрина:</h2>
-        {% for service in service_list %}
+        {% for service in business.services.all %}
             <div class="jumbotron bg-dark text-light">
                 <h3>{{ forloop.counter }}. {{ service.name }} за {{ service.price }} рублей.</h3>
             </div>
+        {% empty %}
+            <h3>Пока что нет товаров. Пополните ассортимент</h3>
         {% endfor %}
         <div class="jumbotron bg-warning"><form method="post">
             <h2>Форма расширения витрины</h2>
@@ -112,17 +114,21 @@
     </div>
     <div class="jumbotron collapse" id="orders">
         <h2>Ваши заказы:</h2>
-        {% for service in service_list %}
+        {% for service in business.services.all %}
             <div class="jumbotron bg-dark text-light">
                 <h2>{{ service.name }}</h2>
-            {% for order in service.order_set.all %}
+            {% for order in service.orders.all %}
                 <div class="jumbotron text-dark bg-{% cycle 'warning' 'info' 'danger'%}">
                     <h3>{{ order.buyer }} купил {{ order.amount }} штук за {{ order.total_cost }} рублей.</h3>
                     <h3>Куплен: {{ order.buy_date }}</h3>
                     <h4>Налог в {{ tax_income }}% оплачен</h4>
                 </div>
+            {% empty %}
+                <h3>Пока что никто не купил</h3>
             {% endfor %}
             </div>
+        {% empty %}
+            <h2>Пополните ассортимент!</h2>
         {% endfor %}
     </div>
 {% endblock %}

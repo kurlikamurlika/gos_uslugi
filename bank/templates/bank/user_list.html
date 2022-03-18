@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+{% extends 'bank/base.html' %}
+{% block page_title %}База данных жителей Черноруси{% endblock %}
+{% block body_content %}
+    <h1>База данных жителей Черноруси</h1>
+    {% for profile in users %}
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title">{{ profile.username }}</h3>
+                <h4 class="card-subtitle mb-2 text-muted">{{ profile.first_name }} {{ profile.last_name }}</h4>
+                <h5 class="card-text">Банковские счета: {% for bank_acc in profile.bank_account.all %}{{ forloop.counter }}. {{ bank_acc.name }}; {% empty %}Нет{% endfor %}</h5>
+                <button class="btn btn-secondary" data-bs-toggle="collapse" data-bs-target="#citizenship_{{ profile.id }}">Информация о гражданстве</button>
+                <button class="btn btn-info" data-bs-toggle="collapse" data-bs-target="#properties_{{ profile.id }}">Имущество</button>
+                <button class="btn btn-warning" data-bs-toggle="collapse" data-bs-target="#businesses_{{ profile.id }}">Бизнесы</button>
+                <div id="citizenship_{{ profile.id }}" class="collapse jumbotron my-3">
+                    {% if profile.citizen %}
+                        <h5>Ник в Discord: {{ profile.citizen.discord_name }}</h5>
+                        <h5>Ник в Minecraft: {{ profile.citizen.minecraft_name }}</h5>
+                        <h5>Откуда: {{ profile.citizen.country }}</h5>
+                    {% else %}
+                        <h5>У этого жителя нет гражданства Черноруси</h5>
+                    {% endif %}
+                </div>
+                <div id="properties_{{ profile.id }}" class="collapse jumbotron my-3">
+                    <h4>Имущество</h4>
+                    {% for property in profile.citizen.properties.all %}
+                        <h5>{{ forloop.counter }}. {{ property.name }} - {{ property.market_price }} рублей.</h5>
+                    {% empty %}
+                        <h5>Пока что нет имущества</h5>
+                    {% endfor %}
+                </div>
+                <div id="businesses_{{ profile.id }}" class="jumbotron collapse my-3">
+                    <h4>Бизнесы</h4>
+                    {% for business in profile.citizen.businesses.all %}
+                        <h5>{{ forloop.counter }}. {{ business.name }} - {{ business.bank_account.name }}</h5>
+                    {% empty %}
+                        <h5>У этого жителя пока нет бизнесов</h5>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}

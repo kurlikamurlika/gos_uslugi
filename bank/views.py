@@ -8,6 +8,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 import random, string
 from django.utils import timezone
+from django.views import generic
 
 # Create your views here.
 def index(request):
@@ -25,19 +26,20 @@ def index(request):
     }
     return render(request, 'bank/index.html', context=index_dict)
 
-def profile(request, user_id):
-    user_profile = User.objects.get(pk=user_id)
+def profile(request):
+    user = request.user
     bank_acc = ''
-    transaction_get = ''
-    transaction_send = ''
+    all_trans = ''
     try:
-        bank_acc = BankAccount.objects.filter(user_id=user_id).get(account_type='personal')
+        bank_acc = BankAccount.objects.filter(user_id=user.id).get(account_type='personal')
         no_account = False
         transaction_get = Transaction.objects.filter(receiver_id=bank_acc.id)
         transaction_send = Transaction.objects.filter(sender_id=bank_acc.id)
+        all_trans = transaction_get.union(transaction_send)
+        all_trans = list(all_trans)[::-1]
     except:
         no_account = True
-    return render(request, 'bank/profile.html', context={'no_account': no_account, 'bank_acc': bank_acc, 'user_profile': user_profile, 'trans_get': transaction_get, 'trans_send': transaction_send})
+    return render(request, 'bank/profile.html', context={'no_account': no_account, 'bank_acc': bank_acc, 'user_profile': user, 'trans_list': all_trans})
 
 def bank_result(request):
     name = 'PER' + ''.join(random.choices(string.ascii_uppercase + string.digits, k=7))
@@ -127,6 +129,7 @@ def citizen(request):
         has_citizenship = False
     form = getCitizenShip(request.POST or None)
     form_property = RegisterProperty(request.POST or None)
+    form_car = RegisterCarForm(request.POST or None)
     citizen_dict = {
         'has_citizenship': has_citizenship,
         'citizenship': citizenship,
@@ -134,6 +137,7 @@ def citizen(request):
         'has_bank': has_bank,
         'form_property': form_property,
         'property_list': property_list,
+        'form_car': form_car,
     }
 
     if form.is_valid():
@@ -147,6 +151,11 @@ def citizen(request):
         citizen_property = form_property.save(commit=False)
         citizen_property.citizen = citizenship
         citizen_property.save()
+    if form_car.is_valid():
+        car = form_car.save(commit=False)
+        car.registration_plate = str(car.owner.country) + ''.join(random.choices(string.digits, k=4)) + ''.join(random.choices(string.ascii_uppercase, k=2))
+        car.registered_by = request.user
+        car.save()
     return render(request, 'bank/citizen.html', context=citizen_dict)
 
 def get_citizenship(request):
@@ -300,10 +309,7 @@ def business_detail(request, business_id):
         job_position.business = business
         job_position.save()
     create_employee = CreateEmployee(request.POST or None)
-    create_employee.fields['position'].queryset = JobPosition.objects.filter(business_id=business.id)
-    position_list = JobPosition.objects.filter(business_id=business.id).order_by('-salary')
-    emp_list = Employee.objects.filter(business_id=business.id).order_by('-position')
-
+    create_employee.fields['position'].queryset = business.job_positions.all()
     if create_employee.is_valid():
         employee = create_employee.save(commit=False)
         employee.business = business
@@ -312,7 +318,6 @@ def business_detail(request, business_id):
         service = create_service.save(commit=False)
         service.owner = business
         service.save()
-    service_list = Service.objects.filter(owner_id=business.id).order_by('-price')
     business_dict = {
         'business': business,
         'send_money': send_money,
@@ -323,10 +328,7 @@ def business_detail(request, business_id):
         'profit': profit,
         'create_job_position': create_job_position,
         'create_employee': create_employee,
-        'position_list': position_list,
-        'emp_list': emp_list,
         'create_service': create_service,
-        'service_list': service_list,
         'tax_income': 10,
     }
     return render(request, 'bank/business_detail.html', context=business_dict)
@@ -391,3 +393,9 @@ def make_order(request, service_id):
 
 def laws(request):
     return render(request, 'bank/laws.html')
+
+class UserListView(generic.ListView):
+    template_name = 'bank/user_list.html'
+    model = User
+    context_object_name = 'users'
+    ordering = ['username']

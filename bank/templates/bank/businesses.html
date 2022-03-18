@@ -10,7 +10,7 @@
             <h3>{{ business.description }}</h3>
             <button class="btn btn-lg btn-primary" data-bs-toggle="collapse" data-bs-target="#services_{{ business.id }}">Витрина компании</button>
             <div class="collapse" id="services_{{ business.id }}">
-                {% for service in business.service_set.all %}
+                {% for service in business.services.all %}
                     <div class="jumbotron bg-dark text-light my-2">
                         <h4>Название: {{ service.name }}.</h4>
                         <h4>Цена за 1шт: {{ service.price }} рублей.</h4>

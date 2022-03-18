@@ -86,3 +86,10 @@ class MakeOrder(forms.ModelForm):
     class Meta:
         model = Order
         fields = ('amount',)
+
+class RegisterCarForm(forms.ModelForm):
+    owner = forms.ModelChoiceField(queryset=Citizen.objects.all(), label="Владелец")
+    car_model = forms.ModelChoiceField(queryset=Property.objects.all(), label="Модель авто")
+    class Meta:
+        model = Car
+        fields = ('owner', 'car_model')

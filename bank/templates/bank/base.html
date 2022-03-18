@@ -40,7 +40,7 @@
             <div class="d-flex">
                 {% if user.is_authenticated %}
                     <li class="nav-item">{
-                        <a class="btn btn-primary mx-3" href="{% url 'bank:profile' user.id%}">{{ user.get_username }}</a></li>
+                        <a class="btn btn-primary mx-3" href="{% url 'bank:profile'%}">{{ user.get_username }}</a></li>
                     <li class="nav-item">
                         <a class="btn btn-primary" href="{% url 'logout'%}?next={{request.path}}">Выйти</a>
                     </li>
