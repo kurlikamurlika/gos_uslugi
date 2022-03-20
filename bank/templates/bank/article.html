@@ -1,21 +1,19 @@
 <!DOCTYPE html>
 {% extends 'bank/base.html' %}
 {% block page_title %}{{ article.title }}{% endblock %}
-{% block extra_nav %}
-    <div class="row">
-        <div class="col-9">
-            <h1>{{ article.title }}</h1>
-            <p style="line-height: 16px; font-size: 13px">Автор: <span class="text-primary">{{ article.author.username }}</span>. Дата публикации: {{ article.pub_date }}</p>
-            <img src="{{ article.picture.url }}" class="img-responsive" style="display: block; margin-left: auto; margin-right: auto; max-width: 100%">
-            <p style="line-height: 30px; font-size: 18px">{{ article.content }}</p>
-        </div>
-        <div class="col-md-3 jumbotron">
-            <h4>Новости Черноруси:</h4>
-            <ul class="list-group">
-                {% for element in article_list %}
-                    <li class="list-group-item"><a style="text-decoration: none;" href="{% url 'bank:article' element.id%}">{{ element.title }}</a></li>
-                {% endfor %}
-            </ul>
-        </div>
+{% block body_content %}
+    <div class="">
+        <h1>{{ article.title }}</h1>
+        <p style="line-height: 16px; font-size: 13px">Автор: <span class="text-primary">{{ article.author.username }}</span>. Дата публикации: {{ article.pub_date }}</p>
+        <img src="{{ article.picture.url }}" class="img-responsive" style="display: block; margin-left: auto; margin-right: auto; max-width: 100%">
+        <p style="line-height: 30px; font-size: 18px">{{ article.content }}</p>
+    </div>
+    <div class="jumbotron">
+        <h4>Новости Черноруси:</h4>
+        <ul class="list-group">
+            {% for element in article_list %}
+                <li class="list-group-item"><a style="text-decoration: none;" href="{% url 'bank:article' element.id%}">{{ element.title }}</a></li>
+            {% endfor %}
+        </ul>
     </div>
 {% endblock %}
