@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 {% extends 'bank/base.html' %}
 {% block page_title %}ЦБ{% endblock %}
-
+{% block extra_nav %}
+    <h4 class="bg-dark text-light"><marquee>Курсы валют: {% for exchange_rate in exchange_rates %} {{ exchange_rate.resource }} {{ exchange_rate.rate }} CHR.{% endfor %}</marquee></h4>
+{% endblock %}
 {% block body_content %}
     {% if user.is_authenticated %}
         <h1>Добро пожаловать в Центральный Банк</h1>
