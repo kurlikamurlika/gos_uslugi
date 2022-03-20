@@ -402,7 +402,11 @@ class UserListView(generic.ListView):
     context_object_name = 'users'
     ordering = ['username']
 
-class ArticleDetailView(generic.DetailView):
-    template_name = 'bank/article.html'
-    model = Article
-    context_object_name = 'article'
+def article(request, article_id):
+    article = Article.objects.get(pk=article_id)
+    article_list = Article.objects.all()
+    view_dict = {
+        'article': article,
+        'article_list': article_list,
+    }
+    return render(request, 'bank/article.html', context=view_dict)
