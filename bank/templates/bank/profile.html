@@ -24,7 +24,7 @@
                         <th class="text-light">Отправитель</th>
                         <th class="text-light">Получатель</th>
                         <th class="text-light">Сумма</th>
-                        <th class="text-light">Дата и время по Киеву</th>
+                        <th class="text-light">Дата</th>
                     </tr>
                 </th>
                 </thead>
@@ -38,7 +38,7 @@
                         <td><h5>{{ trans.sender.user.username }} - {{ trans.sender.name }}</h5></td>
                         <td><h5>{{ trans.receiver.user.username }} - {{ trans.receiver.name }}</h5></td>
                         <td><h5>{{ trans.amount }}</h5></td>
-                        <td><h5>{{ trans.pub_time }}</h5></td>
+                        <td><h5>{{ trans.pub_time.date }}</h5></td>
                     </tr>
                 {% endfor %}
                 </tbody>
