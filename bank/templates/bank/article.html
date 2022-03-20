@@ -3,7 +3,7 @@
 {% block page_title %}{{ article.title }}{% endblock %}
 {% block body_content %}
     <h1>{{ article.title }}</h1>
-    <img src="{{ article.picture.url }}" class="img-responsive">
+    <img src="{{ article.picture.url }}" class="img-responsive" width="50%" style="display: block; margin-left: auto; margin-right: auto; width: 50%">
     <h3>Автор: <span class="text-primary">{{ article.author.username }}</span>. Дата публикации: {{ article.pub_date }}</h3>
     <p style="font-size: 26px">{{ article.content }}</p>
 {% endblock %}
