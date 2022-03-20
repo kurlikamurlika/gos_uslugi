@@ -21,8 +21,7 @@
                 <thead>
                 <th>
                     <tr>
-                        <th class="text-light">Отправитель</th>
-                        <th class="text-light">Получатель</th>
+                        <th class="text-light">Участник</th>
                         <th class="text-light">Сумма</th>
                         <th class="text-light">Дата</th>
                     </tr>
@@ -32,13 +31,15 @@
                 {% for trans in trans_list %}
                     {% if trans.receiver.id == bank_acc.id %}
                         <tr class="bg-success text-light">
+                        <td><h5>{{ trans.sender.user.username }} - {{ trans.sender.name }}</h5></td>
+                        <td><h5>{{ trans.amount }}</h5></td>
+                        <td><h5>{{ trans.pub_time.date }}</h5></td>
                     {% else %}
                         <tr class="bg-danger text-light">
-                    {% endif %}
-                        <td><h5>{{ trans.sender.user.username }} - {{ trans.sender.name }}</h5></td>
                         <td><h5>{{ trans.receiver.user.username }} - {{ trans.receiver.name }}</h5></td>
                         <td><h5>{{ trans.amount }}</h5></td>
                         <td><h5>{{ trans.pub_time.date }}</h5></td>
+                    {% endif %}
                     </tr>
                 {% endfor %}
                 </tbody>
