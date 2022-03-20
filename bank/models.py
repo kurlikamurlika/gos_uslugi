@@ -189,3 +189,15 @@ class Car(models.Model):
 
     def __str__(self):
         return f'{self.owner.user.username} владеет {self.car_model.name} с номером {self.registration_plate}'
+
+class Article(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='articles')
+    title = models.CharField(max_length=1024)
+    content = models.TextField()
+    pub_date = models.DateTimeField(default=timezone.now)
+    picture = models.ImageField(upload_to='article_image/', blank=True)
+
+    def __str__(self):
+        return f'{self.title} ({self.pub_date.date()})'
+    class Meta:
+        ordering = ['-pub_date']

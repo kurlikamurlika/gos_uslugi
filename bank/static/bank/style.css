@@ -4,3 +4,10 @@
   background-color: #e9ecef;
   border-radius: .3rem;
 }
+.article-text {
+  font-size: 32px;
+  font-family: Serif, serif;
+}
+.article-title {
+  font-size: 42px;
+}

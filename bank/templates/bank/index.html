@@ -2,6 +2,9 @@
 {% extends 'bank/base.html' %}
 {% load static %}
 {% block page_title %}Главная{% endblock %}
+{% block extra_nav %}
+    <h4 class="bg-dark text-light"><marquee>Последние новости: {% for article in articles %}<a href="{% url 'bank:article' article.id%}">{{ article.title }}</a>{% endfor %}</marquee></h4>
+{% endblock %}
 {% block body_content %}
     {% if user.is_authenticated %}
         <h1>{{ user.first_name }}, добро пожаловать на Гос Услуги!</h1>

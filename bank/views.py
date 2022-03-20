@@ -20,9 +20,11 @@ def index(request):
         count += 1
     average_salary = total_money // count
     central_bank = BankAccount.objects.get(name="GOV9G632R2")
+    articles = Article.objects.all()
     index_dict = {
         'average_salary': average_salary,
         'central_bank': central_bank,
+        'articles': articles,
     }
     return render(request, 'bank/index.html', context=index_dict)
 
@@ -399,3 +401,8 @@ class UserListView(generic.ListView):
     model = User
     context_object_name = 'users'
     ordering = ['username']
+
+class ArticleDetailView(generic.DetailView):
+    template_name = 'bank/article.html'
+    model = Article
+    context_object_name = 'article'
