@@ -46,16 +46,16 @@
     </div>
     <div class="row row-cols-1 row-cols-md-2 g-4">
     {% for article in article_list %}
-      <div class="col">
+      <div class="col"><a href="{% url 'bank:article' article.id%}" style="text-decoration: none">
         <div class="card">
             {% if article.picture %}
                 <img src="{{ article.picture.url }}" class="card-img-top" alt="Обложка">
             {% endif %}
             <div class="card-body">
-                <h5 class="card-title">{{ article.title }}</h5>
+                <h5 class="card-title text-dark">{{ article.title }}</h5>
                 <p class="card-text">Автор: <span class="text-primary">{{ article.author.username }}</span></p>
             </div>
-        </div>
+        </div></a>
       </div>
     {% endfor %}
     </div>
