@@ -3,6 +3,7 @@ from django_countries.fields import CountryField
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import *
+from django.core.exceptions import ValidationError
 
 
 class SignUpForm(UserCreationForm):
@@ -93,3 +94,11 @@ class RegisterCarForm(forms.ModelForm):
     class Meta:
         model = Car
         fields = ('owner', 'car_model')
+
+class CreateArticleForm(forms.ModelForm):
+    title = forms.CharField(label='Заголовок')
+    content = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Введите текст статьи',}), label="Текст статьи")
+    picture = forms.ImageField(label='Фото')
+    class Meta:
+        model = Article
+        exclude = ('author', 'pub_date')

@@ -132,6 +132,7 @@ def citizen(request):
     form = getCitizenShip(request.POST or None)
     form_property = RegisterProperty(request.POST or None)
     form_car = RegisterCarForm(request.POST or None)
+    form_article = CreateArticleForm(request.POST, request.FILES or None)
     citizen_dict = {
         'has_citizenship': has_citizenship,
         'citizenship': citizenship,
@@ -140,6 +141,7 @@ def citizen(request):
         'form_property': form_property,
         'property_list': property_list,
         'form_car': form_car,
+        'form_article': form_article,
     }
 
     if form.is_valid():
@@ -158,6 +160,10 @@ def citizen(request):
         car.registration_plate = str(car.owner.country) + ''.join(random.choices(string.digits, k=4)) + ''.join(random.choices(string.ascii_uppercase, k=2))
         car.registered_by = request.user
         car.save()
+    if form_article.is_valid():
+        article = form_article.save(commit=False)
+        article.author = request.user
+        article.save()
     return render(request, 'bank/citizen.html', context=citizen_dict)
 
 def get_citizenship(request):

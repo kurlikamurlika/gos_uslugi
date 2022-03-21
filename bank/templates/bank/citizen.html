@@ -11,6 +11,7 @@
             {% if user.is_staff %}
                 <a class="btn btn-lg btn-success m-3" href="{% url 'bank:user_list' %}">Информация о жителях страны</a>
                 <button class="btn btn-lg btn-primary m-3" data-bs-toggle="collapse" data-bs-target="#car_registration">Регистрация авто гражданину</button>
+                <button class="btn btn-lg btn-light m-3" data-bs-toggle="collapse" data-bs-target="#create_article">Написать статью</button>
             {% endif %}
             <div id="properties-info" class="collapse">
                 <h2>Ваше имущество:</h2>
@@ -37,6 +38,14 @@
                     {% csrf_token %}
                     <h3>{{ form_car.as_p }}</h3>
                     <input class="btn btn-lg btn-success" type="submit" value="Оформить">
+                </form>
+            </div>
+            <div id="create_article" class="collapse jumbotron">
+                <h2>Создание статьи</h2>
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <h6>{{ form_article.as_p }}</h6>
+                    <input type="submit" class="btn btn-lg btn-success" value="Опубликовать">
                 </form>
             </div>
         {% else %}
