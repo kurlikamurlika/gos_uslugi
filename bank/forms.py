@@ -97,7 +97,7 @@ class RegisterCarForm(forms.ModelForm):
 
 class CreateArticleForm(forms.ModelForm):
     title = forms.CharField(label='Заголовок')
-    content = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Введите текст статьи',}), label="Текст статьи")
+    content = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Введите текст статьи', 'cols': 30}), label="Текст статьи")
     picture = forms.ImageField(label='Фото')
     class Meta:
         model = Article

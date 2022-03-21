@@ -21,10 +21,12 @@ def index(request):
     average_salary = total_money // count
     central_bank = BankAccount.objects.get(name="GOV9G632R2")
     articles = Article.objects.all()[:10]
+    article_list = Article.objects.all()
     index_dict = {
         'average_salary': average_salary,
         'central_bank': central_bank,
         'articles': articles,
+        'article_list': article_list,
     }
     return render(request, 'bank/index.html', context=index_dict)
 

@@ -29,9 +29,6 @@
             <div class="carousel-item">
                 <img src="{% static 'bank/img/chernorus_lozung.jpeg' %}" alt="Лозунг Черноруси" class="d-block w-100">
             </div>
-            <div class="carousel-item">
-                <img src="{% static 'bank/img/chernorus_plakat.jpeg' %}" alt="Плакат" class="d-block w-100">
-            </div>
         </div>
 
         <!-- Left and right controls/icons -->
@@ -46,5 +43,20 @@
         <h2>Экономические показатели Черноруси:</h2>
         <h3>Средняя зарплата в стране: {{ average_salary }} рублей.</h3>
         <h3>Баланс казны: {{ central_bank.balance }} рублей.</h3>
+    </div>
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+    {% for article in article_list %}
+      <div class="col">
+        <div class="card">
+            {% if article.picture %}
+                <img src="{{ article.picture.url }}" class="card-img-top" alt="Обложка">
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ article.title }}</h5>
+                <p class="card-text">Автор: <span class="text-primary">{{ article.author.username }}</span></p>
+            </div>
+        </div>
+      </div>
+    {% endfor %}
     </div>
 {% endblock %}
