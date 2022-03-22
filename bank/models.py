@@ -3,7 +3,6 @@ from django_countries.fields import CountryField
 from django.contrib.auth.models import User
 from django.utils import timezone
 from datetime import timedelta
-from PIL import Image
 
 # Create your models here.
 class BankAccount(models.Model):
@@ -197,13 +196,6 @@ class Article(models.Model):
     content = models.TextField()
     pub_date = models.DateTimeField(default=timezone.now)
     picture = models.ImageField(upload_to='article_image/', blank=True)
-
-    def save(self, *args, **kwargs):
-        instance = super(Article, self).save(*args, **kwargs)
-        image = Image.open(instance.picture.path)
-        image.save(instance.picture.path, quality=20, optimize=True)
-        return instance
-
     def __str__(self):
         return f'{self.title} ({self.pub_date.date()})'
     class Meta:
