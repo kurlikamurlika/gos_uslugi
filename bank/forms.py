@@ -102,3 +102,8 @@ class CreateArticleForm(forms.ModelForm):
     class Meta:
         model = Article
         exclude = ('author', 'pub_date')
+class CreateComment(forms.ModelForm):
+    text = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Введите ваш комментарий', 'cols': 30, 'rows': 3}), label="Комментарий")
+    class Meta:
+        model = Comment
+        fields = ('text',)

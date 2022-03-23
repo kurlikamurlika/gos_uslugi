@@ -200,3 +200,11 @@ class Article(models.Model):
         return f'{self.title} ({self.pub_date.date()})'
     class Meta:
         ordering = ['-pub_date']
+
+class Comment(models.Model):
+    author = models.ForeignKey(User, on_delete=models.PROTECT, related_name='comments')
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='comments')
+    text = models.TextField()
+    pub_date = models.DateTimeField(default=timezone.now)
+    def __str__(self):
+        return f'{self.author} сказал в "{self.article}: {self.text}'

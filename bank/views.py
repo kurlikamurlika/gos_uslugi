@@ -413,8 +413,16 @@ class UserListView(generic.ListView):
 def article(request, article_id):
     article = Article.objects.get(pk=article_id)
     article_list = Article.objects.all()
+    form_comment = CreateComment(request.POST or None)
+    if form_comment.is_valid():
+        comment = form_comment.save(commit=False)
+        comment.author = request.user
+        comment.article = article
+        comment.save()
+
     view_dict = {
         'article': article,
         'article_list': article_list,
+        'form_comment': form_comment,
     }
     return render(request, 'bank/article.html', context=view_dict)

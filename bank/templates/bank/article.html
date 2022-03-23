@@ -10,6 +10,23 @@
         {% endif %}
         <p style="line-height: 30px; font-size: 18px">{{ article.content }}</p>
     </div>
+    <div id="comment-section" class="jumbotron bg-info">
+        <h5>Оставить комментарий</h5>
+        <form method="post">
+            {% csrf_token %}
+            <h6>{{ form_comment.as_p }}</h6>
+            <input value="Опубликовать" type="submit" class="btn btn-success">
+        </form>
+        <h5>Другие комментарии:</h5>
+        {% for comment in article.comments.all %}
+            <div class="jumbotron bg-warning">
+                <p style="font-size: 13px; line-height: 21px; font-family: system-ui"><span class="text-primary">{{ comment.author.username }}</span> <span class="text-secondary">({{ comment.pub_date }})</span></p>
+                <p style="font-size: 16px; line-height: 24px; font-family: system-ui">{{ comment.text }}</p>
+            </div>
+            {% empty %}
+                <h6>Пока что нет комментариев</h6>
+        {% endfor %}
+    </div>
     <div class="jumbotron">
         <h4>Новости Черноруси:</h4>
         <ul class="list-group">
