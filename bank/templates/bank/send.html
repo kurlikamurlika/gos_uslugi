@@ -2,9 +2,11 @@
 {% extends 'bank/base.html' %}
 {% block page_title %}ЦБ{% endblock %}
 {% block extra_nav %}
-    <h4 class="bg-dark text-light"><marquee>Курсы валют: {% for exchange_rate in exchange_rates %} {{ exchange_rate.resource }} {{ exchange_rate.rate }} CHR.{% endfor %}</marquee></h4>
+    {% load static %}
+    <h4 class="bg-dark text-light"><marquee>Курсы валют: {% for exchange_rate in exchange_rates %} <img style="height: 30px" src="{% with 'bank/img/'|add:exchange_rate.resource|add:'.png' as image_static %}{% static image_static %}{% endwith %}"> {{ exchange_rate.rate }} CHR.{% endfor %}</marquee></h4>
 {% endblock %}
 {% block body_content %}
+    {% load static %}
     {% if user.is_authenticated %}
         <h1>Добро пожаловать в Центральный Банк</h1>
         <h2 class="text-secondary">Тут вы можете перевести свои деньги другому человеку.</h2>
@@ -29,7 +31,7 @@
             <h2>Курс валют по Центральному Банку</h2>
             {% for exchange_rate in exchange_rates %}
                 <div class="jumbotron bg-{% cycle 'warning' 'info' 'primary' %}">
-                    <h3>1 {{ exchange_rate.resource }} к  {{ exchange_rate.rate }} CHR. Последнее обновление: {{ exchange_rate.last_update }}.</h3>
+                        <h3>1 <img style="height: 35px" src="{% with 'bank/img/'|add:exchange_rate.resource|add:'.png' as image_static %}{% static image_static %}{% endwith %}"> к  {{ exchange_rate.rate }} CHR. Последнее обновление: {{ exchange_rate.last_update }}.</h3>
                 </div>
             {% endfor %}
             <h4>CHR - Чернорусский рубль</h4>
