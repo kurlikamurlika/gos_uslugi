@@ -12,18 +12,10 @@ from django.views import generic
 
 # Create your views here.
 def index(request):
-    all_emp = Employee.objects.all()
-    total_money = 0
-    count = 0
-    for emp in all_emp:
-        total_money += emp.position.salary
-        count += 1
-    average_salary = total_money // count
     central_bank = BankAccount.objects.get(name="GOV9G632R2")
     articles = Article.objects.all()[:10]
     article_list = Article.objects.all()
     index_dict = {
-        'average_salary': average_salary,
         'central_bank': central_bank,
         'articles': articles,
         'article_list': article_list,
@@ -96,7 +88,16 @@ def send(request):
                 works = False
         else:
             not_enough_money = True
-
+    gdp = 0
+    all_emp = Employee.objects.all()
+    total_money = 0
+    count = 0
+    for emp in all_emp:
+        total_money += emp.position.salary
+        count += 1
+    average_salary = total_money // count
+    for order in Order.objects.all():
+        gdp += order.total_cost
     send_dict = {
         'has_bank': has_bank,
         'bank_account': bank_account,
@@ -104,6 +105,8 @@ def send(request):
         'works': works,
         'not_enough_money': not_enough_money,
         "exchange_rates": ExchangeRate.objects.all(),
+        'gdp': gdp,
+        'average_salary': average_salary,
     }
     return render(request, 'bank/send.html', context=send_dict)
 

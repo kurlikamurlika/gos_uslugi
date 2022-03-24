@@ -3,7 +3,7 @@
 {% block page_title %}ЦБ{% endblock %}
 {% block extra_nav %}
     {% load static %}
-    <h4 class="bg-dark text-light"><marquee>Курсы валют: {% for exchange_rate in exchange_rates %} <img style="height: 30px" src="{% with 'bank/img/'|add:exchange_rate.resource|add:'.png' as image_static %}{% static image_static %}{% endwith %}"> {{ exchange_rate.rate }} CHR.{% endfor %}</marquee></h4>
+    <h4 class="bg-secondary text-light"><marquee>Курсы валют: {% for exchange_rate in exchange_rates %} <img style="height: 30px" src="{% with 'bank/img/'|add:exchange_rate.resource|add:'.png' as image_static %}{% static image_static %}{% endwith %}"> {{ exchange_rate.rate }} <img style="height: 27px" class="align-top" src="{% static 'bank/img/чернорусский рубль.png' %}">.{% endfor %}</marquee></h4>
 {% endblock %}
 {% block body_content %}
     {% load static %}
@@ -11,13 +11,13 @@
         <h1>Добро пожаловать в Центральный Банк</h1>
         <h2 class="text-secondary">Тут вы можете перевести свои деньги другому человеку.</h2>
         {% if has_bank %}
-            <h3>Ваш баланс: {{ bank_account.balance }} рублей.</h3>
+            <h3>Ваш баланс: {{ bank_account.balance }} <img style="height: 27px" class="align-top" src="{% static 'bank/img/чернорусский рубль.png' %}"></h3>
             <div class="jumbotron" id="send_money_code">
                 <h4>Окно перевода на другой счёт по коду ЦБ</h4>
                 <form method="post" action="">
                     {% csrf_token %}
                     <h4>{{ form.receiver.label_tag }} {{ form.receiver }}</h4>
-                    <h4>{{ form.amount.label_tag }} {{ form.amount }} рублей</h4>
+                    <h4>{{ form.amount.label_tag }} {{ form.amount }} <img style="height: 27px" class="align-top" src="{% static 'bank/img/чернорусский рубль.png' %}"></h4>
                     <button class="btn btn-success btn-large mt-3" type="submit">Перевести</button>
                 </form>
                 {% if not_enough_money %}
@@ -31,10 +31,14 @@
             <h2>Курс валют по Центральному Банку</h2>
             {% for exchange_rate in exchange_rates %}
                 <div class="jumbotron bg-{% cycle 'warning' 'info' 'primary' %}">
-                        <h3>1 <img style="height: 35px" src="{% with 'bank/img/'|add:exchange_rate.resource|add:'.png' as image_static %}{% static image_static %}{% endwith %}"> к  {{ exchange_rate.rate }} CHR. Последнее обновление: {{ exchange_rate.last_update }}.</h3>
+                        <h3>1 <img style="height: 35px" src="{% with 'bank/img/'|add:exchange_rate.resource|add:'.png' as image_static %}{% static image_static %}{% endwith %}"> к  {{ exchange_rate.rate }} <img style="height: 27px" class="align-top" src="{% static 'bank/img/чернорусский рубль.png' %}">. Последнее обновление: {{ exchange_rate.last_update }}.</h3>
                 </div>
             {% endfor %}
-            <h4>CHR - Чернорусский рубль</h4>
+            <div class="jumbotron" id="economic-stats">
+                <h2>Экономические показатели Черноруси:</h2>
+                <h3>Средняя зарплата в стране: {{ average_salary }} <img style="height: 27px" class="align-top" src="{% static 'bank/img/чернорусский рубль.png' %}"></h3>
+                <h3>ВВП: {{ gdp }} <img style="height: 27px" class="align-top" src="{% static 'bank/img/чернорусский рубль.png' %}"></h3>
+            </div>
         {% else %}
             <h1 class="text-warning">Сначала создайте себе банковский счёт <a class="" href="{% url 'bank:profile' user.id %}">здесь</a>.</h1>
         {% endif %}

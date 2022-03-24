@@ -2,13 +2,14 @@
 {% extends 'bank/base.html' %}
 {% block page_title %}Заявка на займ{% endblock %}
 {% block body_content %}
+    {% load static %}
     <h1>Вы успешно оформили заявку на получение займа, в ближайшее время заявка будет рассмотрена!</h1>
     <div class="jumbotron">
         <h2>Заявка на кредит</h2>
         <h3>Тип кредита: {{ ask_loan.interest_rate }}.</h3>
-        <h3>Сумма: {{ ask_loan.amount }} рублей.</h3>
+        <h3>Сумма: {{ ask_loan.amount }} <img style="height: 27px" class="align-top" src="{% static 'bank/img/чернорусский рубль.png' %}">.</h3>
         <h3>Срок: {{ ask_loan.period }} дней.</h3>
-        <h3>Сумма возврата: {{ ask_loan.payback_sum }} рублей.</h3>
+        <h3>Сумма возврата: {{ ask_loan.payback_sum }} <img style="height: 27px" class="align-top" src="{% static 'bank/img/чернорусский рубль.png' %}">.</h3>
         <h3>Дата оформления: {{ ask_loan.start_date }}</h3>
         <h3>Дата полного возврата: {{ ask_loan.payback_date }}</h3>
         <h2>Вас устраивают условия?</h2>

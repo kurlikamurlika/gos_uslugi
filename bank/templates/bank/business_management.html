@@ -19,12 +19,13 @@
 </nav>
 {% endblock %}
 {% block body_content %}
+    {% load static %}
     <h1>Панель управления бизнесом</h1>
     {% if has_business %}
         <h2>Ваши бизнесы:</h2>
         {% for business in businesses %}
             <div class="jumbotron">
-                <h3>{{ forloop.counter }}. <a href="{% url 'bank:business_detail' business.id %}">{{ business.name }}</a>: баланс - {{ business.bank_account.balance }} рублей.</h3>
+                <h3>{{ forloop.counter }}. <a href="{% url 'bank:business_detail' business.id %}">{{ business.name }}</a>: баланс - {{ business.bank_account.balance }} <img style="height: 27px" class="align-top" src="{% static 'bank/img/чернорусский рубль.png' %}">.</h3>
             </div>
         {% endfor %}
     {% endif %}

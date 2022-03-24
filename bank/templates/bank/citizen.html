@@ -2,6 +2,7 @@
 {% extends 'bank/base.html' %}
 {% block page_title %}Портал Гражданина{% endblock %}
 {% block body_content %}
+    {% load static %}
     {% if user.is_authenticated %}
         <h1>Портал Гражданина</h1>
         {% if has_citizenship%}
@@ -18,9 +19,9 @@
                 <div class="bg-warning btn my-3">
                     {% for item in property_list %}
                         {% if item.car %}
-                            <h3>{{ forloop.counter }}. {{ item.property_type }}: {{ item.name }} ({{ item.car.registration_plate }}); {{ item.description }} за {{ item.market_price }} рублей.</h3>
+                            <h3>{{ forloop.counter }}. {{ item.property_type }}: {{ item.name }} ({{ item.car.registration_plate }}); {{ item.description }} за {{ item.market_price }} <img style="height: 27px" class="align-top" src="{% static 'bank/img/чернорусский рубль.png' %}">.</h3>
                         {% else %}
-                            <h3>{{ forloop.counter }}. {{ item.property_type }}: {{ item.name }}; {{ item.description }} за {{ item.market_price }} рублей.</h3>
+                            <h3>{{ forloop.counter }}. {{ item.property_type }}: {{ item.name }}; {{ item.description }} за {{ item.market_price }} <img style="height: 27px" class="align-top" src="{% static 'bank/img/чернорусский рубль.png' %}">.</h3>
                         {% endif %}
                     {% endfor %}
                 </div>

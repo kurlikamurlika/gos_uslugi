@@ -2,6 +2,7 @@
 {% extends 'bank/base.html' %}
 {% block page_title %}Информация о бизнесе{% endblock %}
 {% block body_content %}
+    {% load static %}
     <h1>{{ business.name }}</h1>
     <h2 class="text-secondary">Панель управления предприятием</h2>
     <button data-bs-toggle="collapse" data-bs-target="#bank_info" class="btn btn-lg btn-primary m-3">Перевод средств на счет</button>
@@ -13,7 +14,7 @@
     <div class="jumbotron collapse" id="bank_info">
         <h3>Банковская информация о бизнесе</h3>
         <h4>Код ЦБ: {{ business.bank_account.name }}</h4>
-        <h4>Баланс: {{ business.bank_account.balance }} рублей.</h4>
+        <h4>Баланс: {{ business.bank_account.balance }} <img style="height: 27px" class="align-top" src="{% static 'bank/img/чернорусский рубль.png' %}">.</h4>
         <h3>Перевод средств на счёт</h3>
         <div class="bg-warning p-2">
             <form method="post" class="">
@@ -47,7 +48,7 @@
             <button class="btn btn-lg btn-primary" data-bs-toggle="collapse" data-bs-target="#position_{{ position.id }}">{{ position.name }}</button>
             <div id="position_{{ position.id }}" class="collapse">
                 <h4>{{ position.description }}</h4>
-                <h4>Зарплата: {{ position.salary }} рублей.</h4>
+                <h4>Зарплата: {{ position.salary }} <img style="height: 27px" class="align-top" src="{% static 'bank/img/чернорусский рубль.png' %}">.</h4>
             </div>
         {% endfor %}
         <hr>
@@ -82,7 +83,7 @@
             </div>
             <div id="emp_{{ emp.id }}" class="collapse">
                 <h4>Должность: {{ emp.position.name }}</h4>
-                <h4>Зарплата: {{ emp.position.salary }} рублей.</h4>
+                <h4>Зарплата: {{ emp.position.salary }} <img style="height: 27px" class="align-top" src="{% static 'bank/img/чернорусский рубль.png' %}">.</h4>
                 <h4>Вступил в должность: {{ emp.hire_date }}</h4>
             </div>
         {% endfor %}
@@ -119,7 +120,7 @@
                 <h2>{{ service.name }}</h2>
             {% for order in service.orders.all %}
                 <div class="jumbotron text-dark bg-{% cycle 'warning' 'info' 'danger'%}">
-                    <h3>{{ order.buyer }} купил {{ order.amount }} штук за {{ order.total_cost }} рублей.</h3>
+                    <h3>{{ order.buyer }} купил {{ order.amount }} штук за {{ order.total_cost }} <img style="height: 27px" class="align-top" src="{% static 'bank/img/чернорусский рубль.png' %}">.</h3>
                     <h3>Куплен: {{ order.buy_date }}</h3>
                     <h4>Налог в {{ tax_income }}% оплачен</h4>
                 </div>
